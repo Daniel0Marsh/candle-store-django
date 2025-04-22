@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="374885b1-6e93-40cb-b605-6bdffc4ecb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/basket/templates/basket.html" beforeDir="false" afterPath="$PROJECT_DIR$/source/basket/templates/basket.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/basket/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/basket/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/media/default/footer_video.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/source/media/default/footer_video.mp4" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -73,7 +75,7 @@
       <option name="presentableId" value="Default" />
       <updated>1745147274565</updated>
       <workItem from="1745147275587" duration="792000" />
-      <workItem from="1745148232911" duration="33683000" />
+      <workItem from="1745148232911" duration="35003000" />
     </task>
     <servers />
   </component>

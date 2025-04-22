@@ -145,7 +145,12 @@
             </div>
 
             <div class="basket-total text-center mt-4">
-                <h4 class="fw-bold text-uppercase">Total: ${{ cart.total }}</h4>
+                {% if cart.free_delivery_applied %}
+                    <h5 class="text-success mb-2">🎉 You qualify for free delivery!</h5>
+                {% else %}
+                    <h5 class="text-muted mb-2">Delivery Fee: ${{ cart.delivery_fee }}</h5>
+                {% endif %}
+                <h4 class="fw-bold text-uppercase">Total: ${{ cart.final_total }}</h4>
                 <a href="#" class="btn btn-caramel btn-lg shadow-lg rounded-5 px-5 py-3 mt-3">Proceed to Checkout</a>
             </div>
 

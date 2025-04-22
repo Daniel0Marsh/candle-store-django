@@ -1,21 +1,20 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from branding.models import Branding
-from products.models import Candle, WaxMelt
+from products.models import Candle, WaxMelt, StorePricingSettings
 
+
+from decimal import Decimal
 
 class BasketPageView(TemplateView):
     template_name = 'basket.html'
 
     def get_context_data(self, **kwargs):
-        """
-        Get context data for the template.
-        """
+        context = super().get_context_data(**kwargs)
         basket = self.request.session.get('basket', {})
 
-        # Get all products in the basket with details
         products = []
-        total = 0
+        total = Decimal("0.00")
         for product_id, quantity in basket.items():
             try:
                 product = Candle.objects.get(id=product_id)
@@ -23,8 +22,9 @@ class BasketPageView(TemplateView):
                 try:
                     product = WaxMelt.objects.get(id=product_id)
                 except WaxMelt.DoesNotExist:
-                    continue  # Skip if the product doesn't exist
-            product_total = (product.discount_price if product.discount_price else product.price) * quantity
+                    continue
+            price = product.discount_price if product.discount_price else product.price
+            product_total = price * quantity
             products.append({
                 'product': product,
                 'quantity': quantity,
@@ -33,15 +33,25 @@ class BasketPageView(TemplateView):
             })
             total += product_total
 
-        # Apply any discounts or logic you might need to calculate (e.g., free shipping for orders over a certain amount)
-        context = {
+        pricing_settings = StorePricingSettings.objects.first()
+        delivery_fee = Decimal("0.00")
+
+        if pricing_settings:
+            if not pricing_settings.free_delivery_over or total < pricing_settings.free_delivery_over:
+                delivery_fee = pricing_settings.delivery_fee
+
+        context.update({
             "cart": {
                 'item_count': sum(basket.values()),
                 'products': products,
                 'total': total,
+                'final_total': total + delivery_fee,
+                'delivery_fee': delivery_fee,
+                'free_delivery_applied': pricing_settings.free_delivery_over and total >= pricing_settings.free_delivery_over
             },
+            "pricing_settings": pricing_settings,
             "branding": Branding.objects.first(),
-        }
+        })
         return context
 
     def post(self, request, *args, **kwargs):
