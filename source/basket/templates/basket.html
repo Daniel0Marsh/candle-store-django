@@ -151,7 +151,7 @@
                     <h5 class="text-muted mb-2">Delivery Fee: ${{ cart.delivery_fee }}</h5>
                 {% endif %}
                 <h4 class="fw-bold text-uppercase">Total: ${{ cart.final_total }}</h4>
-                <a href="#" class="btn btn-caramel btn-lg shadow-lg rounded-5 px-5 py-3 mt-3">Proceed to Checkout</a>
+                <a href="{% url 'user_details' %}" class="btn btn-caramel btn-lg shadow-lg rounded-5 px-5 py-3 mt-3">Proceed to Checkout</a>
             </div>
 
         {% else %}

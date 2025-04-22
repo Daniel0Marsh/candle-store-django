@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Basket - {{ branding.company_name }}{% endblock %}</title>
+
+    {% block extra_head %}
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #fdf8f4;
+            --dusty-rose: #e8cfc7;
+            --mauve: #d8bfd8;
+            --caramel: #b88b4a;
+            --deep-brown: #4e342e;
+            --soft-pink: #fceae8;
+            --dark-text: #3b2c2a;
+        }
+
+        body {
+            background-color: var(--cream);
+            color: var(--dark-text);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+            color: #fff;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-caramel {
+            background-color: var(--caramel);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+        }
+
+        .btn-caramel:hover {
+            background-color: #a06c36;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<section class="py-5" style="background-color: var(--cream); min-height: 80vh;">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold text-shadow-lg mb-4" style="font-family: 'Playfair Display', serif;">Secure Payment</h1>
+        <p class="lead mb-5">You're one step away from completing your order. Click the button below to proceed to secure payment.</p>
+
+        <div class="d-flex justify-content-center">
+            <div class="card shadow-lg p-4 rounded-4" style="max-width: 500px; background-color: #fff;">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Pay with Card</h4>
+                    <p class="mb-4">We use <strong>Stripe</strong> to securely process your payment. You will be redirected to complete your transaction.</p>
+                    <button id="checkout-button" class="btn btn-caramel btn-lg px-4 py-2 shadow-sm rounded-5">
+                        Proceed to Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe("{{ publishable_key }}");
+
+    document.getElementById("checkout-button").addEventListener("click", function () {
+        stripe.redirectToCheckout({
+            sessionId: "{{ session_id }}"
+        }).then(function (result) {
+            if (result.error) {
+                alert(result.error.message);
+            }
+        });
+    });
+</script>
+{% endblock %}
