@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Order Confirmed - {{ branding.company_name }}{% endblock %}</title>
+
+    {% block extra_head %}
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #fdf8f4;
+            --dusty-rose: #e8cfc7;
+            --mauve: #d8bfd8;
+            --caramel: #b88b4a;
+            --deep-brown: #4e342e;
+            --soft-pink: #fceae8;
+            --dark-text: #3b2c2a;
+        }
+
+        body {
+            background-color: var(--cream);
+            color: var(--dark-text);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+            color: #fff;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-caramel {
+            background-color: var(--caramel);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+        }
+
+        .btn-caramel:hover {
+            background-color: #a06c36;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<section class="py-5" style="background-color: var(--cream); min-height: 80vh;">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold text-success mb-4" style="font-family: 'Playfair Display', serif;">Thank You!</h1>
+        <p class="lead mb-3">Your payment was successful, and your order is confirmed.</p>
+        {% if user_email %}
+            <p class="mb-4">A confirmation email has been sent to <strong>{{ user_email }}</strong>.</p>
+        {% else %}
+            <p class="mb-4">We were unable to send a confirmation email.</p>
+        {% endif %}
+        <a href="{% url 'home' %}" class="btn btn-caramel btn-lg px-4 py-2 rounded-5 shadow-sm">Return to Homepage</a>
+    </div>
+</section>
+{% endblock %}
