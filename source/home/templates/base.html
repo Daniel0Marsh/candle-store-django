@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="keywords" content="{% block keywords %}Django, Web Development, Custom Websites, Python Development, Web Hosting, DigitalOcean{% endblock %}">
+    <meta name="description" content="{% block desc %}CodeBlock.io specializes in custom Django web development, creating scalable, high-performance websites, and providing web hosting services on DigitalOcean.{% endblock %}">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}{% endblock %}">
+    <meta property="og:description" content="{% block og_desc %}{% endblock %}">
+    <meta property="og:image" content="{{ branding.logo.url }}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="website">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    {% load static %}
+    <!-- Dynamically set the favicon and logo -->
+    <link rel="icon" type="image/x-icon" href="{{ branding.favicon.url }}">
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body style="background-color: #F6F1EC">
+
+
+<nav id="navbar" class="navbar navbar-expand-lg navbar-light shadow-sm py-3" style="font-family: 'Playfair Display', serif;">
+    <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand fw-bold text-uppercase" href="{% url 'home' %}">
+            <img src="{{ branding.logo.url }}" alt="LuxeCandles Logo" height="70">
+        </a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Nav Content -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <!-- Shop Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark px-3 py-2 fw-semibold" href="{% url 'all_products' %}" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Shop
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="shopDropdown">
+                        <li><a class="dropdown-item" href="{% url 'all_products' %}">All Products</a></li>
+                        <li><a class="dropdown-item" href="{% url 'candles' %}">Candles</a></li>
+                        <li><a class="dropdown-item" href="{% url 'wax_melts' %}">Wax Melts</a></li>
+                    </ul>
+                </li>
+
+                <!-- About -->
+                <li class="nav-item">
+                    <a class="nav-link text-dark px-3 py-2 fw-semibold" href="{% url 'about' %}">About</a>
+                </li>
+
+                <!-- Contact -->
+                <li class="nav-item">
+                    <a class="nav-link text-dark px-3 py-2 fw-semibold" href="{% url 'home' %}#contact">Contact</a>
+                </li>
+            </ul>
+
+            <!-- Search, Cart -->
+            <div class="d-flex align-items-center gap-3">
+                <!-- Search -->
+                <form class="d-flex me-2" role="search">
+                    <input class="form-control form-control-sm rounded-pill px-3" type="search" placeholder="Search" aria-label="Search">
+                </form>
+
+                <!-- Cart -->
+                <a href="{% url 'basket' %}" class="text-dark position-relative">
+                    <i class="bi bi-bag fs-5"></i>
+                    {% if cart.item_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-center" style="font-size: .8rem;">
+                            {{ cart.item_count }}
+                        </span>
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+{% block content %} {% endblock %}
+
+<footer class="pt-5 position-relative text-light d-flex flex-column justify-content-end" style="min-height: 100vh; font-family: 'Playfair Display', serif;">
+
+    <!-- Background Video -->
+    <video class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" autoplay muted loop playsinline style="z-index: -1;">
+        <source src="{{ branding.footer_video.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50" style="z-index: -1;"></div>
+
+    <!-- Footer Content -->
+    <div class="container text-center text-md-start py-5">
+        <div class="row g-4">
+            <!-- Brand Info -->
+            <div class="col-md-4">
+                <img src="{{ branding.logo.url }}" alt="{{ branding.company_name }}" class="mb-3" style="max-height: 60px;">
+                <p class="small">Handcrafted candles and wax melts made with love and luxury. Fill your space with warmth, serenity, and elegance.</p>
+            </div>
+
+            <!-- Navigation -->
+            <div class="col-md-2">
+                <h6 class="text-uppercase fw-semibold mb-3">Shop</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="{% url 'candles' %}" class="text-light text-decoration-none">Candles</a></li>
+                    <li><a href="{% url 'wax_melts' %}" class="text-light text-decoration-none">Wax Melts</a></li>
+                </ul>
+            </div>
+
+            <!-- Information -->
+            <div class="col-md-3">
+                <h6 class="text-uppercase fw-semibold mb-3">Info</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="{% url 'about' %}" class="text-light text-decoration-none">About Us</a></li>
+                    <li><a href="{% url 'home' %}#contact" class="text-light text-decoration-none">Contact</a></li>
+                    <li><a href="{% url 'privacy_policy' %}" class="text-light text-decoration-none">Privacy Policy</a></li>
+                    <li><a href="{% url 'terms_of_service' %}" class="text-light text-decoration-none">Terms Of Service</a></li>
+                </ul>
+            </div>
+
+            <!-- Social / Newsletter -->
+            <div class="col-md-3">
+                <h6 class="text-uppercase fw-semibold mb-3">Connect</h6>
+                <div class="d-flex gap-3 mb-3">
+                    <a href="{{ branding.facebook_link }}" class="text-light fs-5"><i class="bi bi-facebook"></i></a>
+                    <a href="{{ branding.instagram_link }}" class="text-light fs-5"><i class="bi bi-instagram"></i></a>
+                    <a href="{{ branding.tiktok_link }}" class="text-light fs-5"><i class="bi bi-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="border-light my-4">
+        <div class="text-center small">
+            &copy; {{ now.year }} LuxeCandles. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- navbar dropdown js -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const navbar = document.getElementById("navbar");
+        const navbarToggler = document.querySelector(".navbar-toggler");
+        const navbarCollapse = document.getElementById("navbarNav");
+
+        navbarCollapse.addEventListener("show.bs.collapse", function () {
+            navbar.classList.add("expanded");
+        });
+
+        navbarCollapse.addEventListener("hidden.bs.collapse", function () {
+            navbar.classList.remove("expanded");
+        });
+    });
+</script>
+
+</body>
+</html>
