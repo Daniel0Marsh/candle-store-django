@@ -125,21 +125,21 @@
     <div class="container">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
             {% for product in products %}
-            <div class="col">
-                <a href="{% url 'product_detail' product.product_type product.pk %}" class="card border-0 rounded-5 bg-transparent text-decoration-none" style="width: 20rem;">
-                    <img src="{{ product.image.url }}" class="card-img-top rounded-4" alt="{{ product.name }}" style="height: 300px; object-fit: cover;">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text fw-bold">
-                            {% if product.discount_price %}
-                                <del>${{ product.price }}</del> <span class="text-danger">${{ product.discount_price }}</span>
-                            {% else %}
-                                ${{ product.price }}
-                            {% endif %}
-                        </p>
-                    </div>
-                </a>
-            </div>
+                <div class="col d-flex justify-content-center">
+                    <a href="{% url 'product_detail' product.product_type product.pk %}" class="card border-0 rounded-5 bg-transparent text-decoration-none" style="width: 20rem;">
+                        <img src="{{ product.image.url }}" class="card-img-top rounded-4" alt="{{ product.name }}" style="height: 300px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text fw-bold">
+                                {% if product.discount_price %}
+                                    <del>${{ product.price }}</del> <span class="text-danger">${{ product.discount_price }}</span>
+                                {% else %}
+                                    ${{ product.price }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </a>
+                </div>
             {% endfor %}
         </div>
     </div>

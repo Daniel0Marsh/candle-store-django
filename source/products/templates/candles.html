@@ -125,7 +125,7 @@
     <div class="container">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
             {% for candle in candles %}
-            <div class="col">
+            <div class="col d-flex justify-content-center">
                 <a href="{% url 'product_detail' 'candle' candle.pk %}" class="card border-0 rounded-5 bg-transparent text-decoration-none" style="width: 20rem;">
                     <img src="{{ candle.image.url }}" class="card-img-top rounded-4" alt="{{ candle.name }}" style="height: 300px; object-fit: cover;">
                     <div class="card-body text-center">

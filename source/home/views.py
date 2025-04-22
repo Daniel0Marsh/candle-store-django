@@ -9,7 +9,7 @@ from itertools import chain
 from .models import HomePage, PrivacyPolicyPage, TermsOfServicePage
 from branding.models import Branding
 from products.models import Candle, WaxMelt, StorePricingSettings
-
+from django.db.models import Q
 import requests
 import json
 import urllib
@@ -132,6 +132,28 @@ class HomePageView(TemplateView):
             # If required fields are missing
             messages.error(request, "Please fill in all the fields.")
             return render(request, 'contact_us.html')
+
+
+class ProductSearchView(TemplateView):
+    template_name = 'search_results.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('q', '')
+
+        # Add search results
+        context['query'] = query
+        context['candles'] = Candle.objects.filter(Q(title__icontains=query)) if query else Candle.objects.none()
+        context['waxmelts'] = WaxMelt.objects.filter(Q(title__icontains=query)) if query else WaxMelt.objects.none()
+
+        # Add global context (cart, branding, homepage)
+        basket = self.request.session.get('basket', {})
+        item_count = sum(basket.values())
+        context['cart'] = {'item_count': item_count}
+        context['branding'] = Branding.objects.first()
+        context['home'] = HomePage.objects.first()
+
+        return context
 
 
 class AboutPageView(TemplateView):

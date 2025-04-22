@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results - {{ branding.company_name }}{% endblock %}
+
+{% block extra_head %}
+{% load static %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --cream: #fdf8f4;
+        --dusty-rose: #e8cfc7;
+        --mauve: #d8bfd8;
+        --caramel: #b88b4a;
+        --deep-brown: #4e342e;
+        --soft-pink: #fceae8;
+        --dark-text: #3b2c2a;
+    }
+
+    body {
+        background-color: var(--cream);
+        color: var(--dark-text);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .btn-caramel {
+        background-color: var(--caramel);
+        color: #fff;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        border-radius: 0.5rem;
+    }
+
+    .btn-caramel:hover {
+        background-color: #a06c36;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+        font-family: 'Playfair Display', serif;
+    }
+
+    .text-shadow-lg {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Search Results Heading -->
+<section class="py-5 text-center">
+    <div class="container">
+        <h2 class="display-5 fw-bold text-shadow-lg" style="font-family: 'Playfair Display', serif;">
+            Search Results for "{{ query }}"
+        </h2>
+        <p class="lead">{{ candles.count|add:waxmelts.count }} item{{ candles.count|add:waxmelts.count|pluralize }} found</p>
+    </div>
+</section>
+
+<!-- Search Results -->
+<section class="all-products py-5">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for candle in candles %}
+                <div class="col d-flex justify-content-center">
+                    <a href="{% url 'product_detail' 'candle' candle.pk %}" class="card border-0 rounded-5 bg-transparent text-decoration-none" style="width: 20rem;">
+                        <img src="{{ candle.image.url }}" class="card-img-top rounded-4" alt="{{ candle.title }}" style="height: 300px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ candle.title }}</h5>
+                            <p class="card-text fw-bold">${{ candle.price }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+
+            {% for melt in waxmelts %}
+                <div class="col d-flex justify-content-center">
+                    <a href="{% url 'product_detail' 'waxmelt' melt.pk %}" class="card border-0 rounded-5 bg-transparent text-decoration-none" style="width: 20rem;">
+                        <img src="{{ melt.image.url }}" class="card-img-top rounded-4" alt="{{ melt.title }}" style="height: 300px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ melt.title }}</h5>
+                            <p class="card-text fw-bold">${{ melt.price }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

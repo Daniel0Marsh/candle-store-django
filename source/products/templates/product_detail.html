@@ -59,10 +59,10 @@
 {% block content %}
 <section class="py-5 product-detail-section">
     <div class="container">
-        <div class="row g-5 align-items-center">
+        <div class="row g-5 align-items-center text-center text-md-start">
             <!-- Product Image -->
-            <div class="col-md-6">
-                <img src="{{ product.image.url|default_if_none:'/static/images/default.jpg' }}" class="img-fluid rounded-4 shadow" alt="{{ product.title }}">
+            <div class="col-md-6 d-flex justify-content-center">
+                <img src="{{ product.image.url }}" class="img-fluid rounded-4 shadow" alt="{{ product.title }}" style="max-width: 100%; height: auto;">
             </div>
 
             <!-- Product Details -->
@@ -79,11 +79,11 @@
                     {% endif %}
                 </p>
 
-                <form method="POST" action="#" class="mt-4">
+                <form method="POST" action="#" class="mt-4 d-flex flex-column align-items-center align-items-md-start">
                     {% csrf_token %}
-                    <div class="d-flex align-items-center mb-3">
+                    <div class="d-flex flex-column flex-sm-row align-items-center mb-3 w-100 justify-content-center justify-content-md-start">
                         <label for="quantity" class="me-3 fw-semibold">Quantity:</label>
-                        <input type="number" name="quantity" id="quantity" value="1" min="1" class="form-control w-25" style="border-radius: 0.5rem;">
+                        <input type="number" name="quantity" id="quantity" value="1" min="1" class="form-control w-auto" style="border-radius: 0.5rem;">
                     </div>
                     <button type="submit" class="btn btn-caramel btn-lg shadow">Add to Basket</button>
                 </form>
@@ -91,4 +91,5 @@
         </div>
     </div>
 </section>
+
 {% endblock %}
