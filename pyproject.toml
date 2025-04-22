@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "customer-sophie"
+version = "0.1.0"
+description = ""
+authors = ["Daniel0Marsh <danielmarsh1000@protonmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^5.2"
+django-decouple = "^2.1"
+django-ckeditor-5 = "^0.2.17"
+captcha = "^0.7.1"
+requests = "^2.32.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
