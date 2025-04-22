@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="374885b1-6e93-40cb-b605-6bdffc4ecb13" name="Changes" comment="Update basket page to handle delivery fees and free delivery  &#10;&#10;Added logic to calculate delivery fees based on store settings and display free delivery qualification on the basket page. Updated the basket template and context data to show final total and delivery details accordingly.">
+    <list default="true" id="374885b1-6e93-40cb-b605-6bdffc4ecb13" name="Changes" comment="Update .env and project configurations&#10;&#10;Updated the `.env` file to revise allowed hosts. Added a new `.idea/djangoProject.iml` file and adjusted IntelliJ IDEA project configuration files to align with the updated development environment.">
+      <change afterPath="$PROJECT_DIR$/source/home/templates/search_results.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.MD" beforeDir="false" afterPath="$PROJECT_DIR$/README.MD" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/core/.env" beforeDir="false" afterPath="$PROJECT_DIR$/source/core/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/source/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/home/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/source/home/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/home/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/home/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/home/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/home/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/products/templates/all_products.html" beforeDir="false" afterPath="$PROJECT_DIR$/source/products/templates/all_products.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/products/templates/candles.html" beforeDir="false" afterPath="$PROJECT_DIR$/source/products/templates/candles.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/products/templates/product_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/source/products/templates/product_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/products/templates/wax_melts.html" beforeDir="false" afterPath="$PROJECT_DIR$/source/products/templates/wax_melts.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +81,7 @@
       <updated>1745147274565</updated>
       <workItem from="1745147275587" duration="792000" />
       <workItem from="1745148232911" duration="35186000" />
-      <workItem from="1745345382831" duration="966000" />
+      <workItem from="1745345382831" duration="2573000" />
     </task>
     <task id="LOCAL-00001" summary="Update basket page to handle delivery fees and free delivery  &#10;&#10;Added logic to calculate delivery fees based on store settings and display free delivery qualification on the basket page. Updated the basket template and context data to show final total and delivery details accordingly.">
       <option name="closed" value="true" />
@@ -86,7 +91,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745330326762</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Update .env and project configurations&#10;&#10;Updated the `.env` file to revise allowed hosts. Added a new `.idea/djangoProject.iml` file and adjusted IntelliJ IDEA project configuration files to align with the updated development environment.">
+      <option name="closed" value="true" />
+      <created>1745346377400</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1745346377401</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -94,6 +107,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Update basket page to handle delivery fees and free delivery  &#10;&#10;Added logic to calculate delivery fees based on store settings and display free delivery qualification on the basket page. Updated the basket template and context data to show final total and delivery details accordingly." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update basket page to handle delivery fees and free delivery  &#10;&#10;Added logic to calculate delivery fees based on store settings and display free delivery qualification on the basket page. Updated the basket template and context data to show final total and delivery details accordingly." />
+    <MESSAGE value="Update .env and project configurations&#10;&#10;Updated the `.env` file to revise allowed hosts. Added a new `.idea/djangoProject.iml` file and adjusted IntelliJ IDEA project configuration files to align with the updated development environment." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update .env and project configurations&#10;&#10;Updated the `.env` file to revise allowed hosts. Added a new `.idea/djangoProject.iml` file and adjusted IntelliJ IDEA project configuration files to align with the updated development environment." />
   </component>
 </project>

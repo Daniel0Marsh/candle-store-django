@@ -78,8 +78,12 @@
             <!-- Search, Cart -->
             <div class="d-flex align-items-center gap-3">
                 <!-- Search -->
-                <form class="d-flex me-2" role="search">
-                    <input class="form-control form-control-sm rounded-pill px-3" type="search" placeholder="Search" aria-label="Search">
+                <form class="d-flex me-2" role="search" method="get" action="{% url 'product_search' %}">
+                    <input class="form-control form-control-sm rounded-pill px-3"
+                           type="search"
+                           name="q"
+                           placeholder="Search"
+                           aria-label="Search">
                 </form>
 
                 <!-- Cart -->
@@ -138,9 +142,9 @@
             </div>
 
             <!-- Social / Newsletter -->
-            <div class="col-md-3">
+            <div class="col-md-3 text-center text-md-start">
                 <h6 class="text-uppercase fw-semibold mb-3">Connect</h6>
-                <div class="d-flex gap-3 mb-3">
+                <div class="d-flex justify-content-center justify-content-md-start gap-3 mb-3">
                     <a href="{{ branding.facebook_link }}" class="text-light fs-5"><i class="bi bi-facebook"></i></a>
                     <a href="{{ branding.instagram_link }}" class="text-light fs-5"><i class="bi bi-instagram"></i></a>
                     <a href="{{ branding.tiktok_link }}" class="text-light fs-5"><i class="bi bi-tiktok"></i></a>
