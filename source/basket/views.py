@@ -3,10 +3,14 @@ from django.views.generic import TemplateView
 from branding.models import Branding
 from products.models import Candle, WaxMelt, StorePricingSettings
 from decimal import Decimal
-from django.core.mail import send_mail
 from django.conf import settings
 import stripe
 import json
+from django.db import transaction
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.contrib.auth import get_user_model
 
 # Set Stripe secret key
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -184,7 +188,7 @@ class StripePaymentView(TemplateView):
             line_items=line_items,
             mode='payment',
             success_url='http://localhost:8000/success/',
-            cancel_url='http://localhost:8000/cancel/',
+            cancel_url='http://localhost:8000/basket/',
             metadata={
                 'email': user_info.get('email', ''),
                 'basket': json.dumps(basket),
@@ -204,19 +208,110 @@ class PaymentConfirmationView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Get user info from session
+        basket = self.request.session.get('basket', {})
         user_info = self.request.session.get('user_info', {})
         email = user_info.get('email')
 
-        # Send confirmation email
+        products = []
+        total = Decimal("0.00")
+
+        # Wrap updates inside a transaction
+        with transaction.atomic():
+            for product_id, quantity in basket.items():
+                product = None
+                try:
+                    product = Candle.objects.select_for_update().get(id=product_id)
+                except Candle.DoesNotExist:
+                    try:
+                        product = WaxMelt.objects.select_for_update().get(id=product_id)
+                    except WaxMelt.DoesNotExist:
+                        continue
+
+                price = product.discount_price if product.discount_price else product.price
+                product_total = price * quantity
+                products.append({
+                    'product': product,
+                    'quantity': quantity,
+                    'total': product_total,
+                    'discounted': product.discount_price is not None,
+                })
+                total += product_total
+
+                # Reduce stock quantity
+                if product.stock_quantity >= quantity:
+                    product.stock_quantity -= quantity
+                else:
+                    product.stock_quantity = 0  # avoid negative stock just in case
+                product.save()
+
+        pricing_settings = StorePricingSettings.objects.first()
+        delivery_fee = Decimal("0.00")
+        if pricing_settings:
+            if not pricing_settings.free_delivery_over or total < pricing_settings.free_delivery_over:
+                delivery_fee = pricing_settings.delivery_fee
+
+        cart_info = {
+            'item_count': sum(basket.values()),
+            'products': products,
+            'total': total,
+            'final_total': total + delivery_fee,
+            'delivery_fee': delivery_fee,
+            'free_delivery_applied': pricing_settings and pricing_settings.free_delivery_over and total >= pricing_settings.free_delivery_over
+        }
+
+        branding = Branding.objects.first()
+
+        # Send confirmation email to customer
         if email:
             subject = "Thank You for Your Order!"
-            message = "Hi there,\n\nThank you for your purchase. Your order has been successfully received and is now being processed.\n\nWe'll send another update once your order is on its way!\n\nWith love,\nThe Candle & Wax Melts Team 💛"
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+
+            html_content = render_to_string('confirmation_email.html', {
+                'user_info': user_info,
+                'cart': cart_info,
+                'branding': branding,
+            })
+            text_content = strip_tags(html_content)
+
+            email_message = EmailMultiAlternatives(
+                subject,
+                text_content,
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+            )
+            email_message.attach_alternative(html_content, "text/html")
+            email_message.send()
+
+        # Send notification email to admin(s)
+        admin_users = get_user_model().objects.filter(is_staff=True, is_active=True).exclude(email='')
+        admin_emails = [admin.email for admin in admin_users if admin.email]
+
+        if admin_emails:
+            admin_subject = f"New Order Received from {user_info.get('first_name', 'Customer')} {user_info.get('last_name', '')}"
+
+            admin_html_content = render_to_string('admin_order_notification_email.html', {
+                'user_info': user_info,
+                'cart': cart_info,
+                'branding': branding,
+            })
+            admin_text_content = strip_tags(admin_html_content)
+
+            admin_email_message = EmailMultiAlternatives(
+                admin_subject,
+                admin_text_content,
+                settings.DEFAULT_FROM_EMAIL,
+                admin_emails,
+            )
+            admin_email_message.attach_alternative(admin_html_content, "text/html")
+            admin_email_message.send()
 
         # Clear basket and session info
         self.request.session.pop('basket', None)
         self.request.session.pop('user_info', None)
 
-        context['user_email'] = email
+        context.update({
+            "cart": cart_info,
+            "pricing_settings": pricing_settings,
+            "branding": branding,
+            "user_email": email,
+        })
         return context

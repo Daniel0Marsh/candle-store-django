@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Order Received - {{ branding.company_name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #fdf8f4;
+            --dusty-rose: #e8cfc7;
+            --mauve: #d8bfd8;
+            --caramel: #b88b4a;
+            --deep-brown: #4e342e;
+            --soft-pink: #fceae8;
+            --dark-text: #3b2c2a;
+        }
+
+        body {
+            background-color: var(--cream);
+            color: var(--dark-text);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .email-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--caramel);
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .order-details {
+            margin-bottom: 30px;
+        }
+
+        .order-details h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--deep-brown);
+        }
+
+        .product {
+            border-bottom: 1px solid var(--dusty-rose);
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .product:last-child {
+            border-bottom: none;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .customer-info {
+            background: var(--soft-pink);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+
+        .customer-info h3 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            color: var(--deep-brown);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: var(--dark-text);
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>New Order Received</h1>
+            <p>A customer has placed a new order!</p>
+        </div>
+
+        <div class="order-details">
+            <h2>Order Summary</h2>
+
+            {% for item in cart.products %}
+                <div class="product">
+                    <div>
+                        <strong>{{ item.product.title }}</strong><br>
+                        Quantity: {{ item.quantity }}
+                    </div>
+                    <div>
+                        {% if item.discounted %}
+                            <span style="text-decoration: line-through; color: gray;">${{ item.product.price }}</span><br>
+                            <span style="color: crimson;">${{ item.product.discount_price }}</span>
+                        {% else %}
+                            ${{ item.product.price }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% if cart.free_delivery_applied %}
+                <p class="total text-success">🎉 Free Delivery Applied!</p>
+            {% else %}
+                <p class="total">Delivery Fee: ${{ cart.delivery_fee }}</p>
+            {% endif %}
+
+            <p class="total">Order Total: ${{ cart.final_total }}</p>
+        </div>
+
+        <div class="customer-info">
+            <h3>Customer Information</h3>
+            <p>
+                <strong>Name:</strong> {{ user_info.full_name }}<br>
+                <strong>Email:</strong> {{ user_info.email }}<br>
+            </p>
+        </div>
+
+        <div class="customer-info">
+            <h3>Delivery Address</h3>
+            <p>
+                {{ user_info.address_line1 }}<br>
+                {% if user_info.address_line2 %}
+                    {{ user_info.address_line2 }}<br>
+                {% endif %}
+                {{ user_info.city }}<br>
+                {{ user_info.postal_code }}<br>
+                {{ user_info.country }}
+            </p>
+        </div>
+
+        <div class="footer">
+            <p>Log in to your admin panel to view the updated stock levels</p>
+            <p>— {{ branding.company_name }} Team</p>
+        </div>
+    </div>
+</body>
+</html>
