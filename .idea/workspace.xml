@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="374885b1-6e93-40cb-b605-6bdffc4ecb13" name="Changes" comment="Update Stripe API keys in .env file&#10;&#10;Replaced placeholder Stripe keys with test API keys for development purposes. Ensures compatibility with Stripe API during local testing and integration.">
-      <change afterPath="$PROJECT_DIR$/source/basket/templates/admin_order_notification_email.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/source/basket/templates/confirmation_email.html" afterDir="false" />
+    <list default="true" id="374885b1-6e93-40cb-b605-6bdffc4ecb13" name="Changes" comment="Add order email templates and enhance order processing  &#10;&#10;Introduced customer and admin email templates for order confirmation and notifications. Updated order processing to send transactional emails, manage stock updates, and ensure accurate pricing calculations with delivery fees. Enhanced session handling and improved the user experience.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/basket/templates/payment_confomation.html" beforeDir="false" afterPath="$PROJECT_DIR$/source/basket/templates/payment_confirmation.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/basket/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/basket/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/source/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/home/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/source/home/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.MD" beforeDir="false" afterPath="$PROJECT_DIR$/README.MD" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/errors/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/errors/admin.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +75,7 @@
       <updated>1745147274565</updated>
       <workItem from="1745147275587" duration="792000" />
       <workItem from="1745148232911" duration="35186000" />
-      <workItem from="1745345382831" duration="13990000" />
+      <workItem from="1745345382831" duration="15240000" />
     </task>
     <task id="LOCAL-00001" summary="Update basket page to handle delivery fees and free delivery  &#10;&#10;Added logic to calculate delivery fees based on store settings and display free delivery qualification on the basket page. Updated the basket template and context data to show final total and delivery details accordingly.">
       <option name="closed" value="true" />
@@ -121,7 +117,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745353749126</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Add order email templates and enhance order processing  &#10;&#10;Introduced customer and admin email templates for order confirmation and notifications. Updated order processing to send transactional emails, manage stock updates, and ensure accurate pricing calculations with delivery fees. Enhanced session handling and improved the user experience.">
+      <option name="closed" value="true" />
+      <created>1745671511661</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1745671511661</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -133,6 +137,7 @@
     <MESSAGE value="Add product search functionality and UI improvements&#10;&#10;Introduced a new ProductSearchView and related templates to enable product search functionality. Updated URLs, views, and base HTML for search integration. Improved product display layouts with better alignment and responsiveness across templates." />
     <MESSAGE value="Add Stripe payment integration with user details page&#10;&#10;Implemented Stripe payment flow, including a user details page, secure payment redirection, and payment confirmation. Updated templates, views, URLs, and settings to support the integration. Added required dependencies and configurations for Stripe API." />
     <MESSAGE value="Update Stripe API keys in .env file&#10;&#10;Replaced placeholder Stripe keys with test API keys for development purposes. Ensures compatibility with Stripe API during local testing and integration." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update Stripe API keys in .env file&#10;&#10;Replaced placeholder Stripe keys with test API keys for development purposes. Ensures compatibility with Stripe API during local testing and integration." />
+    <MESSAGE value="Add order email templates and enhance order processing  &#10;&#10;Introduced customer and admin email templates for order confirmation and notifications. Updated order processing to send transactional emails, manage stock updates, and ensure accurate pricing calculations with delivery fees. Enhanced session handling and improved the user experience." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add order email templates and enhance order processing  &#10;&#10;Introduced customer and admin email templates for order confirmation and notifications. Updated order processing to send transactional emails, manage stock updates, and ensure accurate pricing calculations with delivery fees. Enhanced session handling and improved the user experience." />
   </component>
 </project>
