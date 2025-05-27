@@ -1,3 +1,7 @@
+"""
+Views for handling basket, checkout, payment processing, and order confirmation.
+"""
+
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from branding.models import Branding
@@ -17,9 +21,15 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class BasketPageView(TemplateView):
+    """
+    Display the basket page with current items, totals, and delivery fee calculation.
+    """
     template_name = 'basket.html'
 
     def get_context_data(self, **kwargs):
+        """
+        Add basket contents, total, and delivery information to context.
+        """
         context = super().get_context_data(**kwargs)
         basket = self.request.session.get('basket', {})
 
@@ -66,7 +76,7 @@ class BasketPageView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         """
-        Handle adding/removing items or updating quantities in the basket.
+        Handle add, remove, and update actions on basket items via POST request.
         """
         action = request.POST.get('action')
         product_id = request.POST.get('product_id')
@@ -86,17 +96,16 @@ class BasketPageView(TemplateView):
 
 
 class UserDetailsPageView(TemplateView):
+    """
+    Collect user contact and address details before Stripe checkout.
+    """
     template_name = 'user_details.html'
 
     def get_context_data(self, **kwargs):
         """
-        Get context data for the template.
+        Add current cart item count and branding to context.
         """
-
-        # Get the current shopping basket from the session
         basket = self.request.session.get('basket', {})
-
-        # Calculate the total item count in the basket
         item_count = sum(basket.values())
 
         context = {
@@ -107,7 +116,7 @@ class UserDetailsPageView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         """
-        Handle form submission for user details and proceed to Stripe payment.
+        Save user details to session and redirect to Stripe payment page.
         """
         user_info = {
             'full_name': request.POST.get('full_name'),
@@ -119,27 +128,27 @@ class UserDetailsPageView(TemplateView):
             'country': request.POST.get('country')
         }
 
-        # Save user info into session for later use
         request.session['user_info'] = user_info
-
-        # Redirect to Stripe payment page
         return redirect('stripe_payment')
 
 
 class StripePaymentView(TemplateView):
+    """
+    Initiate Stripe payment session using items from the basket.
+    """
     template_name = 'stripe_payment.html'
 
     def get_context_data(self, **kwargs):
+        """
+        Create Stripe checkout session and return session ID and publishable key.
+        """
         context = super().get_context_data(**kwargs)
-
-        # Retrieve user and basket information from session
         user_info = self.request.session.get('user_info', {})
         basket = self.request.session.get('basket', {})
 
         line_items = []
         total = Decimal("0.00")
 
-        # Build product line items
         for product_id, quantity in basket.items():
             try:
                 product = Candle.objects.get(id=product_id)
@@ -163,7 +172,6 @@ class StripePaymentView(TemplateView):
                 'quantity': quantity,
             })
 
-        # Add delivery fee if applicable
         delivery_fee = Decimal("0.00")
         pricing_settings = StorePricingSettings.objects.first()
         if pricing_settings:
@@ -182,7 +190,6 @@ class StripePaymentView(TemplateView):
                     'quantity': 1,
                 })
 
-        # Create Stripe Checkout session
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=line_items,
@@ -203,11 +210,16 @@ class StripePaymentView(TemplateView):
 
 
 class PaymentConfirmationView(TemplateView):
+    """
+    Confirm successful payment, update stock, and send emails.
+    """
     template_name = 'payment_confirmation.html'
 
     def get_context_data(self, **kwargs):
+        """
+        Finalize order, send confirmation emails, and clear session data.
+        """
         context = super().get_context_data(**kwargs)
-
         basket = self.request.session.get('basket', {})
         user_info = self.request.session.get('user_info', {})
         email = user_info.get('email')
@@ -215,10 +227,8 @@ class PaymentConfirmationView(TemplateView):
         products = []
         total = Decimal("0.00")
 
-        # Wrap updates inside a transaction
         with transaction.atomic():
             for product_id, quantity in basket.items():
-                product = None
                 try:
                     product = Candle.objects.select_for_update().get(id=product_id)
                 except Candle.DoesNotExist:
@@ -237,11 +247,10 @@ class PaymentConfirmationView(TemplateView):
                 })
                 total += product_total
 
-                # Reduce stock quantity
                 if product.stock_quantity >= quantity:
                     product.stock_quantity -= quantity
                 else:
-                    product.stock_quantity = 0  # avoid negative stock just in case
+                    product.stock_quantity = 0
                 product.save()
 
         pricing_settings = StorePricingSettings.objects.first()
@@ -264,7 +273,6 @@ class PaymentConfirmationView(TemplateView):
         # Send confirmation email to customer
         if email:
             subject = "Thank You for Your Order!"
-
             html_content = render_to_string('confirmation_email.html', {
                 'user_info': user_info,
                 'cart': cart_info,
@@ -281,13 +289,12 @@ class PaymentConfirmationView(TemplateView):
             email_message.attach_alternative(html_content, "text/html")
             email_message.send()
 
-        # Send notification email to admin(s)
+        # Send notification to admin(s)
         admin_users = get_user_model().objects.filter(is_staff=True, is_active=True).exclude(email='')
         admin_emails = [admin.email for admin in admin_users if admin.email]
 
         if admin_emails:
             admin_subject = f"New Order Received from {user_info.get('first_name', 'Customer')} {user_info.get('last_name', '')}"
-
             admin_html_content = render_to_string('admin_order_notification_email.html', {
                 'user_info': user_info,
                 'cart': cart_info,
@@ -304,7 +311,7 @@ class PaymentConfirmationView(TemplateView):
             admin_email_message.attach_alternative(admin_html_content, "text/html")
             admin_email_message.send()
 
-        # Clear basket and session info
+        # Clear session data
         self.request.session.pop('basket', None)
         self.request.session.pop('user_info', None)
 
