@@ -6,9 +6,12 @@ from branding.models import Branding
 
 
 class AllProductsPageView(TemplateView):
+    """Displays all candles and wax melts with filter and search options."""
+
     template_name = 'all_products.html'
 
     def get_context_data(self, **kwargs):
+        """Collects and filters all products and returns them in the context."""
         context = super().get_context_data(**kwargs)
         request = self.request
 
@@ -24,19 +27,15 @@ class AllProductsPageView(TemplateView):
         if search_query:
             candles = candles.filter(title__icontains=search_query)
             wax_melts = wax_melts.filter(title__icontains=search_query)
-
         if scent:
             candles = candles.filter(scent=scent)
             wax_melts = wax_melts.filter(scent=scent)
-
         if size:
             candles = candles.filter(size=size)
             wax_melts = wax_melts.filter(size=size)
-
         if color:
             candles = candles.filter(color=color)
             wax_melts = wax_melts.filter(color=color)
-
         if max_price:
             try:
                 max_price_float = float(max_price)
@@ -45,7 +44,6 @@ class AllProductsPageView(TemplateView):
             except ValueError:
                 pass
 
-        # Merge both into one queryset-like list
         products = sorted(
             chain(candles, wax_melts),
             key=lambda p: p.pk,
@@ -58,25 +56,27 @@ class AllProductsPageView(TemplateView):
             elif isinstance(product, WaxMelt):
                 product.product_type = 'waxmelt'
 
-        # Get the current shopping basket from the session
-        basket = self.request.session.get('basket', {})
-
-        # Calculate the total item count in the basket
+        basket = request.session.get('basket', {})
         item_count = sum(basket.values())
 
-        context['cart'] = {'item_count': item_count}
-        context['branding'] = Branding.objects.first()
-        context['products'] = products
-        context['scent_choices'] = Candle.SCENT_CHOICES
-        context['color_choices'] = Candle.COLOR_CHOICES
-        context['size_choices'] = Candle.SIZE_CHOICES
+        context.update({
+            'cart': {'item_count': item_count},
+            'branding': Branding.objects.first(),
+            'products': products,
+            'scent_choices': Candle.SCENT_CHOICES,
+            'color_choices': Candle.COLOR_CHOICES,
+            'size_choices': Candle.SIZE_CHOICES,
+        })
         return context
 
 
 class CandlesPageView(TemplateView):
+    """Displays filtered list of candle products."""
+
     template_name = 'candles.html'
 
     def get_context_data(self, **kwargs):
+        """Filters and returns candle products in the context."""
         context = super().get_context_data(**kwargs)
         request = self.request
 
@@ -90,41 +90,39 @@ class CandlesPageView(TemplateView):
 
         if search_query:
             candles = candles.filter(title__icontains=search_query)
-
         if scent:
             candles = candles.filter(scent=scent)
-
         if size:
             candles = candles.filter(size=size)
-
         if color:
             candles = candles.filter(color=color)
-
         if max_price:
             try:
                 candles = candles.filter(price__lte=float(max_price))
             except ValueError:
-                pass  # Ignore invalid price input
+                pass
 
-        # Get the current shopping basket from the session
-        basket = self.request.session.get('basket', {})
-
-        # Calculate the total item count in the basket
+        basket = request.session.get('basket', {})
         item_count = sum(basket.values())
 
-        context['cart'] = {'item_count': item_count}
-        context['branding'] = Branding.objects.first()
-        context['candles'] = candles
-        context['scent_choices'] = Candle.SCENT_CHOICES
-        context['color_choices'] = Candle.COLOR_CHOICES
-        context['size_choices'] = Candle.SIZE_CHOICES
+        context.update({
+            'cart': {'item_count': item_count},
+            'branding': Branding.objects.first(),
+            'candles': candles,
+            'scent_choices': Candle.SCENT_CHOICES,
+            'color_choices': Candle.COLOR_CHOICES,
+            'size_choices': Candle.SIZE_CHOICES,
+        })
         return context
 
 
 class WaxMeltsPageView(TemplateView):
+    """Displays filtered list of wax melt products."""
+
     template_name = 'wax_melts.html'
 
     def get_context_data(self, **kwargs):
+        """Filters and returns wax melt products in the context."""
         context = super().get_context_data(**kwargs)
         request = self.request
 
@@ -138,41 +136,39 @@ class WaxMeltsPageView(TemplateView):
 
         if search_query:
             wax_melts = wax_melts.filter(title__icontains=search_query)
-
         if scent:
             wax_melts = wax_melts.filter(scent=scent)
-
         if size:
             wax_melts = wax_melts.filter(size=size)
-
         if color:
             wax_melts = wax_melts.filter(color=color)
-
         if max_price:
             try:
                 wax_melts = wax_melts.filter(price__lte=float(max_price))
             except ValueError:
-                pass  # Ignore invalid price input
+                pass
 
-        # Get the current shopping basket from the session
-        basket = self.request.session.get('basket', {})
-
-        # Calculate the total item count in the basket
+        basket = request.session.get('basket', {})
         item_count = sum(basket.values())
 
-        context['cart'] = {'item_count': item_count}
-        context['branding'] = Branding.objects.first()
-        context['wax_melts'] = wax_melts
-        context['scent_choices'] = WaxMelt.SCENT_CHOICES
-        context['color_choices'] = WaxMelt.COLOR_CHOICES
-        context['size_choices'] = WaxMelt.SIZE_CHOICES
+        context.update({
+            'cart': {'item_count': item_count},
+            'branding': Branding.objects.first(),
+            'wax_melts': wax_melts,
+            'scent_choices': WaxMelt.SCENT_CHOICES,
+            'color_choices': WaxMelt.COLOR_CHOICES,
+            'size_choices': WaxMelt.SIZE_CHOICES,
+        })
         return context
 
 
 class ProductDetailView(TemplateView):
+    """Displays product detail page for a candle or wax melt."""
+
     template_name = 'product_detail.html'
 
     def get_context_data(self, **kwargs):
+        """Returns the selected product detail in the context."""
         context = super().get_context_data(**kwargs)
         product_type = self.kwargs.get('product_type')
         pk = self.kwargs.get('pk')
@@ -184,20 +180,19 @@ class ProductDetailView(TemplateView):
         else:
             raise ValueError("Invalid product type")
 
-        # Get the current shopping basket from the session
         basket = self.request.session.get('basket', {})
-
-        # Calculate the total item count in the basket
         item_count = sum(basket.values())
 
-        # Pass cart item count to context
-        context['product'] = product
-        context['branding'] = Branding.objects.first()
-        context['product_type'] = product_type
-        context['cart'] = {'item_count': item_count}
+        context.update({
+            'product': product,
+            'branding': Branding.objects.first(),
+            'product_type': product_type,
+            'cart': {'item_count': item_count},
+        })
         return context
 
     def post(self, request, *args, **kwargs):
+        """Handles adding the product to the basket."""
         product_type = self.kwargs.get('product_type')
         pk = self.kwargs.get('pk')
 
@@ -208,27 +203,15 @@ class ProductDetailView(TemplateView):
         else:
             raise ValueError("Invalid product type")
 
-        # Get the quantity from the form, default to 1
         quantity = int(request.POST.get('quantity', 1))
-
-        # Get the current shopping basket from the session
         basket = request.session.get('basket', {})
 
-        # Update the basket with the new product and quantity
         if str(product.pk) in basket:
-            basket[str(product.pk)] += quantity  # Update quantity if product is already in the basket
+            basket[str(product.pk)] += quantity
         else:
-            basket[str(product.pk)] = quantity  # Add new product to the basket
+            basket[str(product.pk)] = quantity
 
-        # Save the updated basket back to the session
         request.session['basket'] = basket
+        request.session['item_count'] = sum(basket.values())
 
-        # Recalculate the item count in the basket
-        item_count = sum(basket.values())
-
-        # Save the item count to session for cart display
-        request.session['item_count'] = item_count
-
-        # Redirect back to the product detail page or another page
         return redirect('product_detail', product_type=product_type, pk=pk)
-
