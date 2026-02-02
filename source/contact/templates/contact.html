@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+{# Page-specific CSS or JS ONLY if required #}
+{% endblock %}
+
+{% block content %}
+
+
+<!-- Hero Section -->
+<section id="hero-section" class="hero-overlay d-flex align-items-center text-light position-relative" style="min-height: 50vh;">
+  {% if branding.hero_image %}
+    <img src="{{ branding.hero_image.url }}" alt="{{ branding.hero_image_alt_text|default:'' }}" class="w-100 h-100 position-absolute top-0 start-0" style="object-fit: cover; z-index: 1;">
+  {% endif %}
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row">
+      <div class="col-lg-7">
+        <h1 class="fw-bold display-3 mb-4">Get in Touch </h1>
+        <p class="fw-bold lead mb-4 fs-5">Have questions or need assistance? Reach out to us today.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Form Section -->
+<section class="py-5 position-relative">
+    <div class="container py-5">
+        <div class="row justify-content-center align-items-start gx-5 gy-5">
+
+            <!-- Contact Form Card on Left -->
+            <div class="col-lg-6">
+                <div class="card bg-light border-0" style="border: none !important;">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <div class="input-group input-group-lg shadow-sm rounded-3">
+                                <span class="input-group-text text-primary border"><i class="bi bi-person-fill"></i></span>
+                                <input type="text" class="form-control border" id="name" name="name" placeholder="Full Name" required>
+                            </div> 
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="input-group input-group-lg shadow-sm rounded-3">
+                                <span class="input-group-text text-primary border"><i class="bi bi-telephone-fill"></i></span>
+                                <input type="tel" class="form-control border" id="phone" name="phone" placeholder="Phone Number" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="input-group input-group-lg shadow-sm rounded-3">
+                                <span class="input-group-text text-primary border"><i class="bi bi-envelope-fill"></i></span>
+                                <input type="email" class="form-control border" id="email" name="email" placeholder="Email" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <textarea class="form-control form-control-lg rounded-3 shadow-sm" id="message" name="message" rows="5" placeholder="Your Enquiry" required></textarea>
+                        </div>
+
+                        <!-- Cloudflare Turnstile -->
+                        <div class="text-center mb-4">
+                            <div
+                                class="cf-turnstile"
+                                data-sitekey="{{ CLOUDFLARE_TURNSTILE_SITE_KEY }}"
+                                data-theme="light"
+                                data-callback="enableSubmit"
+                                data-expired-callback="disableSubmit"
+                                data-error-callback="disableSubmit">
+                            </div>
+                        </div>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="text-center">
+                            <button type="submit" id="submit-btn" class="btn btn-primary btn-lg px-4 px-md-5 py-3 rounded-5 shadow" disabled>Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Contact Info on Right -->
+            <div class="col-lg-6">
+                <!-- SEO-Friendly Heading -->
+                <h2 class="fw-bold display-5 mb-4 text-secondary">
+                    Get in Touch With Us
+                </h2>
+                <p class="text-muted mb-5 fs-5">
+                    Have a question about our candles or wax melts, an order enquiry, or a custom request? Fill out the form below and we’ll be happy to help.
+                </p>
+
+                <div class="h-100 d-flex flex-column justify-content-start gap-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <i class="bi bi-geo-alt-fill fs-2 text-primary"></i>
+                        <div>
+                            <h5 class="fw-bold mb-1 fs-4">Address</h5>
+                            <p class="mb-0 text-muted fs-5">{{ branding.company_address }}</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-3">
+                        <i class="bi bi-envelope-fill fs-2 text-primary"></i>
+                        <div>
+                            <h5 class="fw-bold mb-1 fs-4">Email</h5>
+                            <p class="mb-0 text-muted fs-5">{{ branding.company_email }}</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start gap-3">
+                        <i class="bi bi-clock-fill fs-2 text-primary"></i>
+                        <div>
+                            <h5 class="fw-bold mb-1 fs-4">Working Hours</h5>
+                            <p class="mb-0 text-muted fs-5">Mon - Fri: 9:00 AM - 6:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- JavaScript -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+    function enableSubmit() {
+        document.getElementById('submit-btn').disabled = false;
+    }
+</script>
+
+{% endblock %}

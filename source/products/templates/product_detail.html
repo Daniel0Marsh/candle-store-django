@@ -1,62 +1,47 @@
 {% extends "base.html" %}
-
-{% block title %}{{ product.title }} - {{ branding.company_name }}{% endblock %}
+{% load static %}
 
 {% block extra_head %}
-{% load static %}
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --cream: #fdf8f4;
-        --dusty-rose: #e8cfc7;
-        --mauve: #d8bfd8;
-        --caramel: #b88b4a;
-        --deep-brown: #4e342e;
-        --soft-pink: #fceae8;
-        --dark-text: #3b2c2a;
-    }
-
-    body {
-        background-color: var(--cream);
-        color: var(--dark-text);
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .btn-caramel {
-        background-color: var(--caramel);
-        color: #fff;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        font-size: 1.1rem;
-        transition: all 0.3s ease;
-        border-radius: 0.5rem;
-    }
-
-    .btn-caramel:hover {
-        background-color: #a06c36;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .card-title {
-        font-family: 'Playfair Display', serif;
-    }
-
-    .text-shadow-lg {
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .product-detail-section {
-        background-color: var(--cream);
-    }
-
-    .form-control {
-        border: 1px solid var(--caramel);
-    }
-</style>
+{# Page-specific CSS or JS ONLY if required #}
 {% endblock %}
 
 {% block content %}
+
+<!-- hero section -->
+<section
+  id="hero-section"
+  class="hero-overlay d-flex align-items-center text-light position-relative"
+  style="min-height: 50vh; position: relative;"
+>
+  <img 
+    src="{{ branding.hero_image.url }}" 
+    alt="{{ branding.hero_image_alt_text }}"
+    class="w-100 h-100 position-absolute top-0 start-0" 
+    style="object-fit: cover; z-index: 1;"
+  >
+
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row">
+      <div class="col-lg-7">
+
+        <h1 class="display-5 fw-bold">
+            {% if product.title %}
+                {{ product.title }}
+            {% else %}
+                All Products
+            {% endif %}
+        </h1>
+
+        <p class="fw-bold lead mb-4 fs-5">
+          {{ product.description }}
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <section class="py-5 product-detail-section">
     <div class="container">
         <div class="row g-5 align-items-center text-center text-md-start">
@@ -72,10 +57,10 @@
 
                 <p class="fs-4 fw-bold">
                     {% if product.discount_price %}
-                        <del class="text-muted">${{ product.price }}</del>
-                        <span class="text-danger">${{ product.discount_price }}</span>
+                        <del class="text-muted">£{{ product.price }}</del>
+                        <span class="text-danger">£{{ product.discount_price }}</span>
                     {% else %}
-                        ${{ product.price }}
+                        £{{ product.price }}
                     {% endif %}
                 </p>
 
@@ -92,4 +77,32 @@
     </div>
 </section>
 
+
+<!-- Featured Products Section -->
+<section class="featured-products py-5">
+    <div class="container">
+
+        <!-- Section header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="display-5 fw-bold mb-0 text-end">
+                Featured Products
+            </h2>
+
+            <a href="{% url 'products' %}" class="text-link">
+                View all <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <!-- Products grid -->
+        <div class="row g-4">
+
+            {% for product in featured_products|slice:":4" %}
+                {% include "_product_card.html" with product=product %}
+            {% empty %}
+                <p class="text-center">No featured products available at the moment.</p>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
 {% endblock %}

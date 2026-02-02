@@ -1,0 +1,43 @@
+<div class="col position-relative">
+  <a href="{% url 'product_detail' product.slug %}"
+     class="card h-100 border-0 text-decoration-none bg-transparent position-relative">
+
+    {% if product.image %}
+      <img src="{{ product.image.url }}"
+           class="card-img-top rounded-3"
+           alt="{{ product.title }}"
+           style="height: 300px; object-fit: cover;">
+    {% endif %}
+
+    <div class="card-body px-0 text-center">
+
+      <!-- Badges -->
+      <div class="position-absolute top-0 start-0 m-2 d-flex flex-column gap-1">
+        {% if product.discount_price and product.discount_price < product.price %}
+          <span class="badge bg-danger">On Offer</span>
+        {% endif %}
+        {% if product.product_type == "gift" %}
+          <span class="badge bg-info text-dark">Gift</span>
+        {% endif %}
+        {% if product.created_at|date:"U" > now|date:"U"|add:"-604800" %}
+          <span class="badge bg-success">New</span>
+        {% endif %}
+      </div>
+
+      <h5 class="card-title mb-1">{{ product.title }}</h5>
+
+      <p class="card-text text-muted small mb-2">
+        {{ product.description|truncatewords:18 }}
+      </p>
+
+      <p class="card-text fw-bold mb-0">
+        {% if product.discount_price and product.discount_price < product.price %}
+          <del class="text-muted">£{{ product.price }}</del>
+          <span class="ms-1">£{{ product.effective_price }}</span>
+        {% else %}
+          £{{ product.effective_price }}
+        {% endif %}
+      </p>
+    </div>
+  </a>
+</div>

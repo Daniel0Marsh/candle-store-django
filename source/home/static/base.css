@@ -1,76 +1,641 @@
-        :root {
-            --cream: #fdf8f4;
-            --dusty-rose: #e8cfc7;
-            --mauve: #d8bfd8;
-            --caramel: #b88b4a;
-            --deep-brown: #4e342e;
-            --soft-pink: #fceae8;
-            --dark-text: #3b2c2a;
-        }
+:root {
+    /* Colors */
+    --primary: #212D39;
+    --secondary: #a06c36;
+    --primary-text: #1F1C17;
+    --mute: #7A7368;
+    --border: #E5E7EB;
+    --body: #FFFF;
+    --border-radius: 8px;
+}
 
-        body {
-            background-color: var(--cream);
-            color: var(--dark-text);
-            font-family: 'Poppins', sans-serif;
-        }
+/* ===============================
+   BOOTSTRAP THEME OVERRIDES
+   =============================== */
 
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 1px;
-            color: #fff;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
-        }
+:root {
+    --bs-primary: var(--primary);
+    --bs-secondary: var(--secondary);
+    --bs-body-bg: var(--body);
+    --bs-body-color: var(--mute);
+    --bs-border-color: var(--border);
+    --bs-border-radius: var(--border-radius);
+}
 
-        .btn-caramel {
-            background-color: var(--caramel);
-            color: #fff;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border-radius: 0.5rem;
-        }
+/* ===============================
+   TEXT UTILITIES
+   =============================== */
 
-        .btn-caramel:hover {
-            background-color: #a06c36;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
+.text-primary {
+    color: var(--primary) !important;
+}
 
-        .card-title {
-            font-family: 'Playfair Display', serif;
-        }
+.text-secondary {
+    color: var(--secondary) !important;
+}
 
-        .text-shadow-lg {
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
+.text-muted {
+    color: var(--mute) !important;
+}
 
-        .scrolling-banner {
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-            background-color: var(--caramel);
-            color: #fff;
-        }
+.text-dark {
+    color: var(--primary) !important;
+}
 
-        .scrolling-text {
-            display: inline-block;
-            padding-left: 100%;
-            animation: scroll-left 15s linear infinite;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
+.text-light {
+    color: var(--body) !important;
+}
 
-        @keyframes scroll-left {
-            0% {
-                transform: translateX(0%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
+.bg-dark {
+    background-color: var(--primary) !important;
+}
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
+.bg-light {
+    background-color: var(--body) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary) !important;
+}
+
+.btn-light {
+    background-color: var(--body);
+    border-color: var(--body);
+    color: var(--primary);
+    font-weight: 600;
+    border-radius: var(--border-radius) !important;
+}
+
+.btn-light:hover {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+    color: var(--body);
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--body);
+    font-weight: 600;
+    border-radius: var(--border-radius) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+    color: var(--body);
+}
+
+.btn-secondary {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+    color: var(--body);
+    font-weight: 600;
+    border-radius: var(--border-radius);
+}
+.btn-secondary:hover {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+    color: var(--body);
+}
+
+.btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+    font-weight: 600;
+    
+}
+.btn-outline-primary:hover {
+    background-color: var(--primary);
+    color: var(--secondary);
+    border-color: var(--primary);
+}
+
+.btn-outline-secondary {
+    color: var(--secondary);
+    border-color: var(--secondary);
+    font-weight: 600;
+    border-radius: var(--border-radius) !important;
+}
+.btn-outline-secondary:hover {
+    background-color: var(--secondary);
+    color: var(--body);
+    border-color: var(--secondary);
+}
+
+.card {
+    border-radius: var(--border-radius) !important;
+
+}
+
+.text-link {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+.text-link:hover {
+    color: var(--secondary);
+}
+
+
+/* ===============================
+   BODY
+   =============================== */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: var(--body);
+    color: var(--mute);
+    margin: 0;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Playfair Display', serif;
+}
+
+
+/* ===============================
+   TOP BAR
+   =============================== */
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background-color: var( --primary);
+    z-index: 1050;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.top-bar-text {
+    font-size: 16px;
+    color: var(--body);
+    font-weight: 600;
+
+}
+.top-bar:hover {
+    color: var(--primary);
+    background-color: var(--secondary);
+    padding: 0 10px;
+}
+
+/* Hide on scroll */
+.top-bar.hidden {
+    transform: translateY(-100%);
+}
+
+/* ===============================
+   NAVBAR
+   =============================== */
+.navbar {
+    position: absolute; 
+    top: 40px; 
+    width: 100%;
+    z-index: 9999;
+    transition: all 0.3s ease;
+    background-color: transparent;
+}
+
+/* Navbar container shrink effect using normal Bootstrap container */
+.navbar .container {
+    height: 100px;
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled .container,
+.navbar-container.navbar-shrink .container {
+    height: 80px;
+}
+
+/* Brand image shrink effect */
+.navbar .container .navbar-brand img {
+    max-height: 80px;
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled .container .navbar-brand img,
+.navbar-container.navbar-shrink .container .navbar-brand img {
+    max-height: 50px;
+}
+
+/* Links and CTA */
+.navbar .nav-link {
+    color: var(--body);
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+/* Dropdown item hover */
+.navbar .dropdown-menu .dropdown-item {
+    color: var(--primary);
+    transition: all 0.3s ease;
+}
+
+.navbar .dropdown-menu .dropdown-item:hover {
+    color: var(--secondary);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+.navbar .btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--secondary);
+}
+
+/* SCROLLED STATE */
+.navbar.scrolled {
+    position: fixed;
+    top: 0;
+    background-color: var(--body);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.navbar.scrolled .nav-link {
+    color: var(--mute);
+}
+
+.navbar.scrolled .btn-primary {
+    color: var(--secondary);
+}
+
+.navbar .nav-link:hover {
+    color: var(--secondary);
+}
+.navbar .btn-primary:hover {
+    background-color: var(--secondary);
+    border: 1px solid var(--secondary);
+    color: var(--body);
+}
+
+/* ===============================
+   MOBILE NAVBAR & TOPBAR - FULL SCREEN
+   =============================== */
+@media (max-width: 991.98px) {
+
+    /* Hide top bar completely */
+    .top-bar {
+        display: none !important;
+    }
+
+    /* Navbar fixed, white, smaller, always visible */
+    .navbar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0;
+        width: 100%;
+        height: 60px !important;
+        background-color: var(--body) !important; /* solid white */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 1050;
+        padding: 0 1rem;
+        transition: all 0.3s ease;
+    }
+
+    /* Navbar container smaller */
+    .navbar .container {
+        height: 60px !important;
+        padding: 0 1rem;
+    }
+
+    /* Brand image smaller */
+    .navbar .navbar-brand img {
+        max-height: 40px !important;
+    }
+
+    /* Ensure page content is not hidden behind navbar */
+    body {
+        padding-top: 60px; /* same as navbar height */
+    }
+
+    /* Fullscreen mobile menu */
+    .navbar .collapse.show {
+        position: fixed;
+        top: 60px; /* below navbar */
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 60px);
+        background-color: var(--body);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 20px 0;
+        overflow-y: auto;
+        z-index: 1050;
+        transition: all 0.3s ease;
+    }
+
+    /* Remove overlay pseudo-element if any */
+    .navbar .collapse.show::before {
+        display: none;
+    }
+
+    /* Logo at top of menu */
+    .navbar .collapse.show .navbar-brand {
+        margin-bottom: 20px;
+    }
+
+    /* Close button styling */
+    .navbar .collapse.show .mobile-menu-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 1060;
+    }
+    .navbar .collapse.show .mobile-menu-close .btn-close {
+        width: 28px;
+        height: 28px;
+        background-color: var(--primary);
+        border-radius: 50%;
+        opacity: 1;
+    }
+
+    /* Mobile nav links container */
+    .navbar-nav.d-lg-none {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        text-align: center;
+        gap: 12px;
+        padding: 0 1rem;
+    }
+
+    /* Mobile nav links styling */
+    .navbar-nav.d-lg-none .nav-link {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--mute);
+        padding: 12px 0;
+        width: 100%;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+    }
+    .navbar-nav.d-lg-none .nav-link:hover {
+        color: var(--primary);
+        transform: scale(1.03);
+    }
+
+    /* Nested mobile submenus */
+    .navbar-nav.d-lg-none ul {
+        padding-left: 15px;
+        margin-top: 8px;
+        width: 100%;
+    }
+    .navbar-nav.d-lg-none ul li .nav-link {
+        font-size: 18px;
+        padding: 6px 0;
+        color: var(--mute);
+    }
+    .navbar-nav.d-lg-none ul li .nav-link:hover {
+        color: var(--primary);
+        transform: scale(1.02);
+    }
+
+    /* Add dropdown indicators */
+    .navbar-nav.d-lg-none .dropdown-toggle::after {
+        content: "▼";
+        color: var(--mute);
+        display: inline-block;
+        margin-left: 6px;
+        font-size: 12px;
+        transition: transform 0.3s ease;
+    }
+    .navbar-nav.d-lg-none .dropdown.show > .nav-link.dropdown-toggle::after {
+        transform: rotate(180deg);
+    }
+
+    /* Mobile CTA button at bottom */
+    .navbar-nav.d-lg-none .btn {
+        font-size: 18px;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        width: 80%;
+        text-align: center;
+    }
+
+    /* Optional: add subtle dividers between top-level links */
+    .navbar-nav.d-lg-none .nav-item + .nav-item {
+        border-top: 1px solid rgba(0,0,0,0.1);
+        width: 80%;
+        margin: 0 auto;
+    }
+}
+
+/* ===============================
+   MOBILE MENU OPEN - FORCE WHITE
+   =============================== */
+@media (max-width: 991.98px) {
+
+    /* Force the collapsed menu to always have white background on mobile */
+    .navbar .collapse {
+        background-color: var(--body) !important;
+        transition: none !important;
+    }
+
+    /* When menu is open */
+    .navbar .collapse.show {
+        background-color: var(--body) !important;
+    }
+
+    /* Ensure menu links are visible immediately */
+    .navbar .collapse.show .nav-link {
+        color: var(--mute) !important;
+    }
+
+    /* Optional: remove box-shadow on opening if you want smooth open */
+    .navbar .collapse.show {
+        box-shadow: none;
+    }
+}
+
+
+/* ===============================
+   MOBILE LOGO FIX
+   =============================== */
+@media (max-width: 991.98px) {
+    /* Hide desktop logo */
+    .navbar .navbar-brand img[src="{{ branding.logo.url }}"] {
+        display: none !important;
+    }
+
+    /* Ensure mobile logo is always visible */
+    .navbar-nav.d-lg-none .navbar-brand img {
+        display: block !important;
+        max-height: 40px; /* match navbar height */
+    }
+}
+
+
+/* ===============================
+   FOOTER
+   =============================== */
+.footer {
+  background-color: var(--secondary);
+  color: var(--mute);
+}
+
+.footer-link {
+  color: var(--mute);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-link:hover {
+  color: var(--body);
+  text-decoration: none;
+}
+
+.footer h5 {
+  color: var(--body);
+}
+
+@media (max-width: 767.98px) {
+  .footer .col-md-3 {
+    text-align: center;
+  }
+}
+.footer-newsletter {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: stretch;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: var(--secondary);
+    border: 1px solid var(--mute);
+}
+
+.footer-input {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    color: var(--body);
+    font-size: 0.875rem;
+}
+
+.footer-input::placeholder {
+    color: var(--mute);
+}
+
+.footer-input:focus {
+    outline: none;
+}
+
+.footer-btn {
+    border: none;
+    padding: 0 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background-color: var(--primary);
+    color: var(--secondary);
+}
+
+.footer-btn:hover {
+    color: var(--secondary);
+    background-color: var(--body);
+}
+
+/* ===============================
+   HERO OVERLAY
+   =============================== */
+.hero-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(11, 31, 51, 0.7); /* #0B1F33 @ 70% */
+  z-index: 2;
+}
+
+/* ===============================
+   BLOG HERO OVERLAY
+   =============================== */
+.feature-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(11, 31, 51, 0.4); /* #0B1F33 @ 70% */
+  z-index: 2;
+}
+
+
+/* ===============================
+   PORTFOLIO CARD HOVER EFFECT
+   =============================== */
+.work-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Overlay starts hidden above the card */
+.work-card .card-overlay {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: rgba(30, 202, 211, 0.9);
+  color: white;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: height 0.4s ease;
+  padding: 0 1rem;
+  z-index: 2;
+}
+
+/* On hover, overlay expands downward */
+.work-card:hover .card-overlay {
+  height: calc(100% + 50px);
+}
+
+/* Fade-in text & button */
+.work-card .card-overlay p,
+.work-card .card-overlay a {
+  opacity: 0;
+  transition: opacity 0.4s ease 0.2s;
+}
+
+.work-card:hover .card-overlay p,
+.work-card:hover .card-overlay a {
+  opacity: 1;
+}
+
+/* Label at the top */
+.work-card .card-label {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  z-index: 3;
+}
+
+/* Make bottom button always above overlay */
+.work-card .bottom-button {
+  position: relative;
+  z-index: 10;
+}
+
+.work-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.work-card .bottom-button {
+  margin-top: auto;
+  position: relative;
+  z-index: 10;
+}
+

@@ -1,108 +1,190 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-    <!-- Required meta tags -->
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-579400ZRXK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-579400ZRXK');
+    </script>
+
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
+    </script>
+
+    <!-- Organization JSON-LD (GLOBAL, NOT PAGE-LEVEL) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "{{ branding.company_name }}",
+      "url": "{{ request.build_absolute_uri|slice:":-1" }}",
+      "logo": "{{ branding.logo.url }}",
+      "description": "{{ branding.site_map_description }}",
+      "email": "{{ branding.company_email }}",
+      "telephone": "{{ branding.company_phone }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ branding.company_address }}",
+        "addressLocality": "Kent",
+        "addressCountry": "UK"
+      },
+      "contactPoint": [{
+        "@type": "ContactPoint",
+        "telephone": "{{ branding.company_phone }}",
+        "contactType": "customer service",
+        "email": "{{ branding.company_email }}",
+        "hoursAvailable": "{{ branding.working_hours }}"
+      }],
+      "sameAs": [
+        {% if branding.facebook_url %}"{{ branding.facebook_url }}",{% endif %}
+        {% if branding.twitter_url %}"{{ branding.twitter_url }}",{% endif %}
+        {% if branding.linkedin_url %}"{{ branding.linkedin_url }}",{% endif %}
+        {% if branding.instagram_url %}"{{ branding.instagram_url }}"{% endif %}
+      ]
+    }
+    </script>
+
+    <!-- Required Meta -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="true">
-    <meta name="keywords" content="{% block keywords %}Django, Web Development, Custom Websites, Python Development, Web Hosting, DigitalOcean{% endblock %}">
-    <meta name="description" content="{% block desc %}CodeBlock.io specializes in custom Django web development, creating scalable, high-performance websites, and providing web hosting services on DigitalOcean.{% endblock %}">
-    <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="{% block og_title %}{% endblock %}">
-    <meta property="og:description" content="{% block og_desc %}{% endblock %}">
-    <meta property="og:image" content="{{ branding.logo.url }}">
-    <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    <meta property="og:type" content="website">
+    <!-- Cache Control -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 
-    <title>{% block title %}{% endblock %}</title>
+    <!-- ==================== SEO (STATIC PAGES) ==================== -->
+    {% include "meta.html" %}
+    <!-- ============================================================ -->
 
-    {% load static %}
-    <!-- Dynamically set the favicon and logo -->
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ branding.favicon.url }}">
-    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
 
-    <!-- Bootstrap CSS -->
+    <!-- Fonts -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Global CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css">
+
+    <!-- Global JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script>Prism.highlightAll();</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
 
     {% block extra_head %}{% endblock %}
 </head>
 
-<body style="background-color: #F6F1EC">
+<body>
+<!-- Top Bar -->
+<a class="top-bar d-flex justify-content-center align-items-center">
+    <div class="top-bar-text text-center">
+        {{ branding.top_bar }} £{{ products_settings.free_delivery_over }}
+    </div>
+</a>
 
 
-<nav id="navbar" class="navbar navbar-expand-lg navbar-light shadow-sm py-3" style="font-family: 'Playfair Display', serif;">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
     <div class="container">
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold text-uppercase" href="{% url 'home' %}">
-            <img src="{{ branding.logo.url }}" alt="LuxeCandles Logo" height="70">
+
+        <!-- Logo (Left) -->
+        <a class="navbar-brand me-lg-5" href="{% url 'home' %}">
+            <img src="{{ branding.logo.url }}"
+                 data-dark-src="{{ branding.logo_dark.url }}"
+                 alt="{{ branding.logo_alt_text }}"
+                 data-geo="{{ branding.logo_geo_tag }}"
+                 class="img-fluid"
+                 style="max-height:80px;">
         </a>
 
         <!-- Toggler -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Nav Content -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                <!-- Shop Dropdown -->
+        <!-- Collapsible Content -->
+        <div class="collapse navbar-collapse" id="mainNav">
+
+            <!-- Centre Navigation (Desktop) -->
+            <ul class="navbar-nav d-none d-lg-flex gap-4 position-absolute start-50 translate-middle-x">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-dark px-3 py-2 fw-semibold" href="{% url 'all_products' %}" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Shop
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="shopDropdown">
-                        <li><a class="dropdown-item" href="{% url 'all_products' %}">All Products</a></li>
-                        <li><a class="dropdown-item" href="{% url 'candles' %}">Candles</a></li>
-                        <li><a class="dropdown-item" href="{% url 'wax_melts' %}">Wax Melts</a></li>
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Shop</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'products' %}">All Products</a></li>
+                        <li><a class="dropdown-item" href="{% url 'product_candles' %}">Candles</a></li>
+                        <li><a class="dropdown-item" href="{% url 'product_waxmelts' %}">Wax Melts</a></li>
+                        <li><a class="dropdown-item" href="{% url 'product_gifts' %}">Gifts</a></li>
                     </ul>
                 </li>
-
-                <!-- About -->
-                <li class="nav-item">
-                    <a class="nav-link text-dark px-3 py-2 fw-semibold" href="{% url 'about' %}">About</a>
-                </li>
-
-                <!-- Contact -->
-                <li class="nav-item">
-                    <a class="nav-link text-dark px-3 py-2 fw-semibold" href="{% url 'home' %}#contact">Contact</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'product_offers' %}">Offers</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'product_new' %}">New</a></li>
             </ul>
 
-            <!-- Search, Cart -->
-            <div class="d-flex align-items-center gap-3">
+            <!-- Right Controls -->
+            <div class="d-flex align-items-center gap-3 ms-lg-auto">
+
                 <!-- Search -->
-                <form class="d-flex me-2" role="search" method="get" action="{% url 'product_search' %}">
-                    <input class="form-control form-control-sm rounded-pill px-3"
-                           type="search"
-                           name="q"
-                           placeholder="Search"
-                           aria-label="Search">
+                <form class="d-flex" role="search" method="get" action="{% url 'products' %}">
+                    <input
+                        type="search"
+                        name="search"
+                        aria-label="Search products"
+                        placeholder="Search"
+                        class="form-control form-control-sm rounded-pill px-3 bg-transparent text-light"
+                        style="--bs-placeholder-color: var(--bs-light); --bs-placeholder-opacity: 1;">
                 </form>
 
                 <!-- Cart -->
-                <a href="{% url 'basket' %}" class="text-dark position-relative">
-                    <i class="bi bi-bag fs-5"></i>
+                <a href="{% url 'basket' %}" class="position-relative text-decoration-none">
+                    <i class="bi bi-bag fs-4 nav-link"></i>
                     {% if cart.item_count > 0 %}
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-center" style="font-size: .8rem;">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             {{ cart.item_count }}
                         </span>
                     {% endif %}
                 </a>
             </div>
+
+            <!-- Mobile Navigation -->
+            <ul class="navbar-nav d-lg-none mt-3 gap-3">
+                <li class="nav-item">
+                    <span class="nav-link fw-semibold">Shop</span>
+                    <ul class="list-unstyled ps-3">
+                        <li><a class="nav-link" href="{% url 'products' %}">All Products</a></li>
+                        <li><a class="nav-link" href="{% url 'product_candles' %}">Candles</a></li>
+                        <li><a class="nav-link" href="{% url 'product_waxmelts' %}">Wax Melts</a></li>
+                        <li><a class="nav-link" href="{% url 'product_gifts' %}">Gifts</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'product_offers' %}">Offers</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'product_new' %}">New</a></li>
+            </ul>
         </div>
     </div>
 </nav>
 
-{% block content %} {% endblock %}
 
-<footer class="pt-5 position-relative text-light d-flex flex-column justify-content-end" style="min-height: 100vh; font-family: 'Playfair Display', serif;">
+<!-- Main Content -->
+{% block content %}{% endblock %}
+
+<!-- Footer -->
+<footer class="pt-5 position-relative text-light d-flex flex-column justify-content-end" style="min-height: 100vh;">
 
     <!-- Background Video -->
     <video class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" autoplay muted loop playsinline style="z-index: -1;">
@@ -114,70 +196,166 @@
 
     <!-- Footer Content -->
     <div class="container text-center text-md-start py-5">
-        <div class="row g-4">
-            <!-- Brand Info -->
-            <div class="col-md-4">
-                <img src="{{ branding.logo.url }}" alt="{{ branding.company_name }}" class="mb-3" style="max-height: 60px;">
-                <p class="small">Handcrafted candles and wax melts made with love and luxury. Fill your space with warmth, serenity, and elegance.</p>
+        <div class="row">
+            
+            <!-- Logo & description -->
+            <div class="col-12 col-md-4 mb-4 text-center text-md-start">
+                <a href="#" class="d-block mb-2">
+                    <img src="{{ branding.logo.url }}" alt="{{ branding.logo_alt_text }}" class="img-fluid mx-auto mx-md-0" style="max-width: 180px;">
+                </a>
+                <p class="small text-light">
+                    Handcrafted candles and wax melts made with love and luxury. Fill your space with warmth, serenity, and elegance.
+                </p>
+
             </div>
 
-            <!-- Navigation -->
-            <div class="col-md-2">
-                <h6 class="text-uppercase fw-semibold mb-3">Shop</h6>
-                <ul class="list-unstyled small">
-                    <li><a href="{% url 'candles' %}" class="text-light text-decoration-none">Candles</a></li>
-                    <li><a href="{% url 'wax_melts' %}" class="text-light text-decoration-none">Wax Melts</a></li>
+            <!-- Footer links -->
+            <div class="col-12 col-md-8 d-flex flex-column flex-md-row justify-content-md-end flex-wrap">
+                <div class="col-12 col-md-3 mb-4">
+                    <h5 class="mb-3 fw-bold">Shop</h5>
+                    <ul class="list-unstyled">
+                    <li><a href="{% url 'product_candles' %}" class="text-light text-decoration-none">Candles</a></li>
+                    <li><a href="{% url 'product_waxmelts' %}" class="text-light text-decoration-none">Wax Melts</a></li>
+                    <li><a href="{% url 'product_offers' %}" class="text-light text-decoration-none">Offers</a></li>
+                    <li><a href="{% url 'product_new' %}" class="text-light text-decoration-none">New</a></li>
+                    <li><a href="{% url 'product_gifts' %}" class="text-light text-decoration-none">Gifts</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-3 mb-4">
+                    <h5 class="mb-3 fw-bold">Info</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'contact' %}" class="text-light text-decoration-none">Contact</a></li>
+                        <li><a href="{% url 'policy_page' 'terms-of-service' %}" class="text-light text-decoration-none">Terms of Service</a></li>
+                        <li><a href="{% url 'policy_page' 'privacy-policy' %}" class="text-light text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="{% url 'policy_page' 'refund-policy' %}" class="text-light text-decoration-none">Refund Policy</a></li>
+                        <li><a href="{% url 'policy_page' 'shipping-policy' %}" class="text-light text-decoration-none">Shipping Policy</a></li>
                 </ul>
-            </div>
+                </div>
+                <div class="col-12 col-md-3 mb-4">
+                    <h5 class="mb-3 fw-bold">Contact</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="mailto:{{ branding.company_email }}" class="footer-link text-light">{{ branding.company_email }}</a></li>
+                    </ul>
 
-            <!-- Information -->
-            <div class="col-md-3">
-                <h6 class="text-uppercase fw-semibold mb-3">Info</h6>
-                <ul class="list-unstyled small">
-                    <li><a href="{% url 'about' %}" class="text-light text-decoration-none">About Us</a></li>
-                    <li><a href="{% url 'home' %}#contact" class="text-light text-decoration-none">Contact</a></li>
-                    <li><a href="{% url 'privacy_policy' %}" class="text-light text-decoration-none">Privacy Policy</a></li>
-                    <li><a href="{% url 'terms_of_service' %}" class="text-light text-decoration-none">Terms Of Service</a></li>
-                </ul>
-            </div>
+                    <!-- Social Icons Row -->
+                    <div class="d-flex justify-content-center justify-content-md-start gap-3 mt-3">
 
-            <!-- Social / Newsletter -->
-            <div class="col-md-3 text-center text-md-start">
-                <h6 class="text-uppercase fw-semibold mb-3">Connect</h6>
-                <div class="d-flex justify-content-center justify-content-md-start gap-3 mb-3">
-                    <a href="{{ branding.facebook_link }}" class="text-light fs-5"><i class="bi bi-facebook"></i></a>
-                    <a href="{{ branding.instagram_link }}" class="text-light fs-5"><i class="bi bi-instagram"></i></a>
-                    <a href="{{ branding.tiktok_link }}" class="text-light fs-5"><i class="bi bi-tiktok"></i></a>
+                        {% if branding.twitter_url %}
+                            <a href="{{ branding.twitter_url }}" target="_blank"
+                            class="text-white fs-4 text-decoration-none opacity-75 hover-opacity-100"
+                            aria-label="Twitter">
+                                <i class="bi bi-twitter-x"></i>
+                            </a>
+                        {% endif %}
+
+                        {% if branding.linkedin_url %}
+                            <a href="{{ branding.linkedin_url }}" target="_blank"
+                            class="text-white fs-4 text-decoration-none opacity-75 hover-opacity-100"
+                            aria-label="LinkedIn">
+                                <i class="bi bi-linkedin"></i>
+                            </a>
+                        {% endif %}
+
+                        {% if branding.facebook_url %}
+                            <a href="{{ branding.facebook_url }}" target="_blank"
+                            class="text-white fs-4 text-decoration-none opacity-75 hover-opacity-100"
+                            aria-label="Facebook">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                        {% endif %}
+
+                        {% if branding.instagram_url %}
+                            <a href="{{ branding.instagram_url }}" target="_blank"
+                            class="text-white fs-4 text-decoration-none opacity-75 hover-opacity-100"
+                            aria-label="Instagram">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                        {% endif %}
+
+                    </div>
+
                 </div>
             </div>
         </div>
-        <hr class="border-light my-4">
-        <div class="text-center small">
-            &copy; {{ now.year }} {{ branding.company_name }}. All rights reserved.
+
+        <hr class="border-light">
+        <div class="text-start text-center text-md-start pb-3 small text-light">
+            &copy; {{ now|date:"Y" }} {{ branding.company_name }}. All rights reserved.
         </div>
     </div>
 </footer>
 
-
-<!-- Bootstrap Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- navbar dropdown js -->
+<!-- Dynamic Logo Switch Script -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const navbar = document.getElementById("navbar");
-        const navbarToggler = document.querySelector(".navbar-toggler");
-        const navbarCollapse = document.getElementById("navbarNav");
+document.addEventListener("DOMContentLoaded", function() {
+    const navbar = document.querySelector('.navbar');
+    const navbarContainer = document.querySelector('.navbar .container');
+    const topBar = document.querySelector('.top-bar');
+    const logo = document.querySelector('.navbar-brand img');
+    const logoLightSrc = "{{ branding.logo.url }}";
+    const logoDarkSrc = "{{ branding.logo_dark.url }}";
+    const collapseMenu = document.querySelector('#mainNav');
 
-        navbarCollapse.addEventListener("show.bs.collapse", function () {
-            navbar.classList.add("expanded");
-        });
+    function applyMobileOverrides() {
+        // Logo always black
+        logo.src = logoDarkSrc;
 
-        navbarCollapse.addEventListener("hidden.bs.collapse", function () {
-            navbar.classList.remove("expanded");
+        // Navbar fixed, white, small
+        navbar.classList.add('scrolled');
+        navbarContainer.classList.add('navbar-shrink');
+
+        // Hide top bar
+        if (topBar) topBar.classList.add('hidden');
+
+        // Force mobile menu background white
+        if (collapseMenu) {
+            collapseMenu.style.backgroundColor = "var(--body)";
+        }
+    }
+
+    function checkScroll() {
+        const isMobile = window.innerWidth <= 991.98;
+
+        if (isMobile) {
+            applyMobileOverrides();
+        } else {
+            // Desktop: original dynamic behavior
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+                navbarContainer.classList.add('navbar-shrink');
+                if (topBar) topBar.classList.add('hidden');
+                logo.src = logoDarkSrc;
+            } else {
+                navbar.classList.remove('scrolled');
+                navbarContainer.classList.remove('navbar-shrink');
+                if (topBar) topBar.classList.remove('hidden');
+                logo.src = logoLightSrc;
+            }
+
+            // Reset collapse menu background for desktop
+            if (collapseMenu) {
+                collapseMenu.style.backgroundColor = "";
+            }
+        }
+    }
+
+    // Listen to scroll, resize, and menu open
+    window.addEventListener('scroll', checkScroll);
+    window.addEventListener('resize', checkScroll);
+
+    // When mobile menu opens, force background white immediately
+    if (collapseMenu) {
+        collapseMenu.addEventListener('show.bs.collapse', function () {
+            if (window.innerWidth <= 991.98) {
+                collapseMenu.style.backgroundColor = "var(--body)";
+            }
         });
-    });
+    }
+
+    checkScroll();
+});
 </script>
+
 
 </body>
 </html>

@@ -1,118 +1,143 @@
 {% extends "base.html" %}
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} Checkout - {{ branding.company_name }}{% endblock %}</title>
-
-    {% block extra_head %}
-    {% load static %}
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --cream: #fdf8f4;
-            --dusty-rose: #e8cfc7;
-            --mauve: #d8bfd8;
-            --caramel: #b88b4a;
-            --deep-brown: #4e342e;
-            --soft-pink: #fceae8;
-            --dark-text: #3b2c2a;
-        }
-
-        body {
-            background-color: var(--cream);
-            color: var(--dark-text);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 1px;
-            color: #fff;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
-        }
-
-        .btn-caramel {
-            background-color: var(--caramel);
-            color: #fff;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border-radius: 0.5rem;
-        }
-
-        .btn-caramel:hover {
-            background-color: #a06c36;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-        .checkout-form {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .checkout-form label {
-            font-weight: 600;
-            margin-top: 1rem;
-            color: var(--dark-text);
-        }
-
-        .checkout-form input {
-            width: 100%;
-            padding: 0.6rem;
-            border-radius: 0.5rem;
-            border: 1px solid #ccc;
-            margin-top: 0.25rem;
-        }
-
-        .checkout-form input:focus {
-            outline: none;
-            border-color: var(--caramel);
-            box-shadow: 0 0 0 0.2rem rgba(184, 139, 74, 0.25);
-        }
-    </style>
-{% endblock %}
+{% load static %}
 
 {% block content %}
-<section class="checkout-section py-5">
-    <div class="container">
-        <h1 class="text-center display-4 fw-bold text-shadow-lg mb-5" style="font-family: 'Playfair Display', serif;">Enter Your Details</h1>
 
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <form method="POST" class="checkout-form">
-                    {% csrf_token %}
+<!-- Hero section -->
+<section
+  id="hero-section"
+  class="hero-overlay d-flex align-items-center text-light position-relative"
+  style="min-height: 50vh;"
+>
+  <img 
+    src="{{ branding.hero_image.url }}" 
+    alt="{{ branding.hero_image_alt_text }}"
+    class="w-100 h-100 position-absolute top-0 start-0"
+    style="object-fit: cover; z-index: 1;"
+  >
 
-                    <label for="full_name">Full Name</label>
-                    <input type="text" id="full_name" name="full_name" required>
-
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-
-                    <label for="address_line1">Address Line 1</label>
-                    <input type="text" id="address_line1" name="address_line1" required>
-
-                    <label for="address_line2">Address Line 2</label>
-                    <input type="text" id="address_line2" name="address_line2">
-
-                    <label for="city">City</label>
-                    <input type="text" id="city" name="city" required>
-
-                    <label for="postal_code">Postal Code</label>
-                    <input type="text" id="postal_code" name="postal_code" required>
-
-                    <label for="country">Country</label>
-                    <input type="text" id="country" name="country" required>
-
-                    <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-caramel btn-lg shadow-lg rounded-5 px-5 py-3">Proceed to Payment</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row">
+      <div class="col-lg-7">
+        <h1 class="fw-bold display-4 mb-3">Checkout</h1>
+        <p class="lead fw-semibold mb-0">
+          Enter your details to complete your order
+        </p>
+      </div>
     </div>
+  </div>
 </section>
+
+<!-- Checkout section -->
+<section class="py-5 bg-light">
+  <div class="container">
+
+    <div class="row justify-content-center">
+      <!-- User Details Form -->
+      <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4 p-md-5">
+
+            <h2 class="h4 fw-bold mb-4 text-center">Your Details</h2>
+
+            <form method="POST" novalidate>
+              {% csrf_token %}
+
+              <div class="mb-3">
+                <label for="full_name" class="form-label fw-semibold">Full name</label>
+                <input type="text" id="full_name" name="full_name" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label fw-semibold">Email address</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="address_line1" class="form-label fw-semibold">Address line 1</label>
+                <input type="text" id="address_line1" name="address_line1" class="form-control" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="address_line2" class="form-label fw-semibold">Address line 2 <span class="text-muted">(optional)</span></label>
+                <input type="text" id="address_line2" name="address_line2" class="form-control">
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="city" class="form-label fw-semibold">City</label>
+                  <input type="text" id="city" name="city" class="form-control" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="postal_code" class="form-label fw-semibold">Postcode</label>
+                  <input type="text" id="postal_code" name="postal_code" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label for="country" class="form-label fw-semibold">Country</label>
+                <input type="text" id="country" name="country" class="form-control" required>
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Proceed to payment</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="col-lg-5">
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4 p-md-5">
+            <h2 class="h5 fw-bold mb-4 text-center">Your Basket</h2>
+
+            {% if cart.item_count > 0 %}
+              <ul class="list-group mb-3">
+                {% for item in cart.products %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ item.product.title }} x {{ item.quantity }}
+                    <span>
+                      {% if item.discounted %}
+                        <span class="text-muted text-decoration-line-through">${{ item.product.price }}</span>
+                        <span class="text-danger fw-semibold">${{ item.total }}</span>
+                      {% else %}
+                        ${{ item.total }}
+                      {% endif %}
+                    </span>
+                  </li>
+                {% endfor %}
+              </ul>
+
+              <div class="mb-2">
+                {% if cart.free_delivery_applied %}
+                  <p class="text-success fw-semibold mb-1">🎉 You qualify for free delivery!</p>
+                {% elif cart.remaining_for_free_delivery %}
+                  <p class="text-muted fw-semibold mb-1">
+                    Spend ${{ cart.remaining_for_free_delivery }} more to qualify for free delivery
+                  </p>
+                  <p class="text-muted mb-0">Delivery Fee: ${{ cart.delivery_fee }}</p>
+                {% else %}
+                  <p class="text-muted mb-0">Delivery Fee: ${{ cart.delivery_fee }}</p>
+                {% endif %}
+              </div>
+
+              <h4 class="fw-bold text-uppercase text-center mt-3">Total: ${{ cart.final_total }}</h4>
+
+            {% else %}
+              <p class="text-center text-muted fs-5">Your basket is empty.</p>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
 {% endblock %}

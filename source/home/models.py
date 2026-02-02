@@ -4,48 +4,38 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 class HomePage(models.Model):
     """
-    Model representing the homepage information for the website.
-    This model stores essential details such as the site's branding elements,
-    contact information, and media assets used on the homepage.
+    Singleton model representing homepage-wide content.
     """
-
-    DEFAULT_IMAGE = "default/placeholder.png"
-    DEFAULT_VIDEO = "default/placeholder.mp4"
 
     hero_image = models.ImageField(
         upload_to="home_page/",
         help_text="Upload the hero section background image.",
-        default=DEFAULT_IMAGE
-    )
-    about_image = models.ImageField(
-        upload_to="home_page/",
-        help_text="Upload the about section image.",
-        default=DEFAULT_IMAGE
+        default="default/placeholder.jpg"
     )
 
     hero_title = models.CharField(
         max_length=100,
         help_text="Main title for the hero section.",
-        default="HANDCRAFTED WAX MELTS & CANDLES"
+        default="Handmade Wax Melts & Scented Candles"
     )
+
     hero_subheading = models.CharField(
         max_length=255,
         help_text="Subheading text for the hero section.",
-        default="A peaceful, luxury stay designed for ultimate relaxation, fun, and pampering."
-    )
-    about_title = models.CharField(
-        max_length=100,
-        help_text="Title for the about section.",
-        default="ABOUT US"
-    )
-    about_subheading = models.CharField(
-        max_length=255,
-        help_text="Subheading for the about section.",
-        default="We take pride in producing high-quality hand-pourd wax melts and candles made from natural ingredients. Our scents are curated to create inviting and relaxing atmospheres in your home."
+        default=(
+            "Luxury home fragrance hand-poured in the UK using high-quality waxes "
+            "and long-lasting scents."
+        )
     )
 
-    about_us_page_content = CKEditor5Field(config_name='default', null=True, blank=True,
-                             help_text="This is the contents of the about us page.",)
+    hero_image_alt_text = models.CharField(
+        max_length=255,
+        help_text="Alternative text for the hero image.",
+        default=(
+            "Handmade wax melts and scented candles by Lelsea’s Melts, "
+            "designed to fill your home with beautiful fragrance"
+        )
+    )
 
     def __str__(self):
         return "Home Page Content"
@@ -55,31 +45,77 @@ class HomePage(models.Model):
         verbose_name_plural = "Home Page Content"
 
 
-class PrivacyPolicyPage(models.Model):
+
+class HomePageFeatureSection(models.Model):
     """
-    Model representing the privacy policy.
+    Represents a left-image / right-content section on the homepage.
     """
 
-    content = CKEditor5Field(config_name='default', null=True, blank=True)
+    home_page = models.ForeignKey(
+        HomePage,
+        on_delete=models.CASCADE,
+        related_name="feature_sections"
+    )
 
-    def __str__(self):
-        return "Privacy Policy Content"
+    image = models.ImageField(
+        upload_to="home_page/features/",
+        help_text="Full-height image for this section.",
+        default="default/placeholder.jpg"
+    )
+
+    image_alt_text = models.CharField(
+        max_length=255,
+        help_text="Alternative text for the feature image.",
+        default=(
+            "Handmade wax melts and scented candles by Lelsea’s Melts, "
+            "designed to fill your home with beautiful fragrance"
+        )
+    )
+
+    title = models.CharField(
+        max_length=120,
+        help_text="SEO-friendly section heading (e.g. Wax Melts, Candles, Handmade)."
+    )
+
+    subheading = models.TextField(
+        max_length=300,
+        help_text="Supporting text describing products or brand values."
+    )
+
+    cta_text = models.CharField(
+        max_length=50,
+        default="Shop now",
+        help_text="Button label."
+    )
+
+    cta_url = models.CharField(
+        max_length=255,
+        help_text="Button link URL.",
+        default="/products/",
+    )
+
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        help_text="Display order (lower numbers appear first)."
+    )
 
     class Meta:
-        verbose_name = "Privacy Policy Content"
-        verbose_name_plural = "Privacy Policy Content"
-
-
-class TermsOfServicePage(models.Model):
-    """
-    Model representing the terms of service.
-    """
-
-    content = CKEditor5Field(config_name='default', null=True, blank=True)
+        ordering = ["order"]
+        verbose_name = "Homepage Feature Section"
+        verbose_name_plural = "Homepage Feature Sections"
 
     def __str__(self):
-        return "Terms Of Service Page Content"
+        return self.title
 
-    class Meta:
-        verbose_name = "Terms Of Service Page Content"
-        verbose_name_plural = "Terms Of Service Page Content"
+
+
+class TermsAndPolicies(models.Model):
+    terms_of_service = CKEditor5Field(config_name='default', null=True, blank=True)
+    privacy_policy = CKEditor5Field(config_name='default', null=True, blank=True)
+    refund_policy = CKEditor5Field(config_name='default', null=True, blank=True)
+    shipping_policy = CKEditor5Field(config_name='default', null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "Store Policies"
+

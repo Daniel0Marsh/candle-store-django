@@ -8,13 +8,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY")
 
-GOOGLE_RECAPTCHA_SECRET_KEY = config("CAPTCHA")
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1').split(',')
-SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+if DEBUG:
+    # Cloudflare Turnstile official test keys (always pass)
+    CLOUDFLARE_TURNSTILE_SITE_KEY = "1x00000000000000000000AA"
+    CLOUDFLARE_TURNSTILE_SECRET_KEY = "1x0000000000000000000000000000000AA"
+else:
+    CLOUDFLARE_TURNSTILE_SITE_KEY = config("CLOUDFLARE_TURNSTILE_SITE_KEY")
+    CLOUDFLARE_TURNSTILE_SECRET_KEY = config("CLOUDFLARE_TURNSTILE_SECRET_KEY")
+
+# Allowed hosts
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1').split(',') + ['testserver']
 
 # Email settings
 EMAIL_BACKEND = config("EMAIL_BACKEND")
@@ -24,7 +30,10 @@ EMAIL_USE_TLS = config("EMAIL_USE_TLS")
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = config("EMAIL_HOST_USER")
-SITE_URL = 'https://www.codeblock.io'
+if DEBUG:
+    SITE_URL = "http://localhost:8000"
+else:
+    SITE_URL = config("SITE_URL")
 
 # stripe payment settings
 STRIPE_SECRET_KEY = config("STRIPE_SECRET_KEY")
@@ -38,13 +47,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     'django_ckeditor_5',
     'captcha',
     'branding',
     'home',
     'products',
     'basket',
-    'errors'
+    'errors',
+    'seo',
+    'contact',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +81,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # App-owned globals
+                "branding.context_processors.branding_context",
+                "basket.context_processors.basket_context",
+                "products.context_processors.product_context",
+                'seo.context_processors.seo_meta',
             ],
         },
     },

@@ -1,0 +1,4 @@
+Offers / New / Gifts pages
+Fix footer links
+Test full purchase flow
+Deploy to server

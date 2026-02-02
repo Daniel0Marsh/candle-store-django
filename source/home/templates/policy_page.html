@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+{# Page-specific CSS or JS ONLY if required #}
+{% endblock %}
+
+{% block content %}
+
+
+<!-- Hero Section -->
+<section id="hero-section" class="hero-overlay d-flex align-items-center text-light position-relative" style="min-height: 50vh;">
+  {% if branding.hero_image %}
+    <img src="{{ branding.hero_image.url }}" alt="{{ branding.hero_image_alt_text|default:'' }}" class="w-100 h-100 position-absolute top-0 start-0" style="object-fit: cover; z-index: 1;">
+  {% endif %}
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row">
+      <div class="col-lg-7">
+        <h1 class="fw-bold display-3 mb-4">{{ policy_title }}</h1>
+        <p class="fw-bold lead mb-4 fs-5">Read our policies to understand how we handle orders, privacy, and your experience with us.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Policy Content Section -->
+ <section class="container p-5">
+    <p class="card-text text-black">{{ policy_content|safe }}</p>
+</section>
+
+{% endblock %}

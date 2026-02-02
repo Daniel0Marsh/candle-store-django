@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% if is_admin %}
+            New Order Received
+        {% else %}
+            Order Confirmation
+        {% endif %}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f6f7f9;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 32px;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e6e6e6;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header p {
+            margin: 0;
+            font-size: 15px;
+            color: #666666;
+        }
+
+        .section {
+            margin-top: 32px;
+        }
+
+        .section h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #e6e6e6;
+            padding-bottom: 8px;
+        }
+
+        .product {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .product:last-child {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .product-qty {
+            font-size: 13px;
+            color: #666666;
+        }
+
+        .product-price {
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .totals {
+            text-align: right;
+            margin-top: 16px;
+        }
+
+        .totals p {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+
+        .totals .final {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .address {
+            background-color: #f9f9f9;
+            padding: 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 13px;
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        {% if is_admin %}
+            <h1>🛒 New Order Received</h1>
+            <p>An order has just been placed on {{ branding.company_name }}.</p>
+        {% else %}
+            <h1>Thank you for your order, {{ user_info.full_name }}!</h1>
+            <p>We’re preparing your order for delivery.</p>
+        {% endif %}
+    </div>
+
+    <!-- Order Summary -->
+    <div class="section">
+        <h2>Order Summary</h2>
+
+        {% for item in cart.products %}
+            <div class="product">
+                <div>
+                    <div class="product-name">{{ item.product.title }}</div>
+                    <div class="product-qty">Quantity: {{ item.quantity }}</div>
+                </div>
+                <div class="product-price">
+                    {% if item.discounted %}
+                        <del>£{{ item.product.price }}</del><br>
+                        <strong>£{{ item.product.discount_price }}</strong>
+                    {% else %}
+                        £{{ item.product.price }}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="totals">
+            {% if cart.free_delivery_applied %}
+                <p><strong>🎉 Free Delivery Applied</strong></p>
+            {% else %}
+                <p>Delivery: £{{ cart.delivery_fee }}</p>
+            {% endif %}
+            <p class="final">Total: £{{ cart.final_total }}</p>
+        </div>
+    </div>
+
+    <!-- Address -->
+    <div class="section">
+        <h2>Delivery Address</h2>
+        <div class="address">
+            {{ user_info.address_line1 }}<br>
+            {% if user_info.address_line2 %}
+                {{ user_info.address_line2 }}<br>
+            {% endif %}
+            {{ user_info.city }}<br>
+            {{ user_info.postal_code }}<br>
+            {{ user_info.country }}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        {% if is_admin %}
+            Please process this order as soon as possible.
+        {% else %}
+            You’ll receive another email once your order has shipped.<br>
+            Thank you for choosing {{ branding.company_name }}.
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

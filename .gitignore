@@ -1,0 +1,56 @@
+# IDE
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+
+# Virtual Environment
+myprojectenv/
+venv/
+env/
+ENV/
+
+# Environment Variables
+.env
+.env.local
+.env.production
+.env.staging
+
+# Database
+*.sqlite3
+*.db
+*.sqlite
+
+# Django
+# Ignore migration files except initial ones
+**/migrations/*.py
+!**/migrations/__init__.py
+
+
+
+# Media Files (user uploaded content)
+source/media/*
+!source/media/default/
+
+
+# Static Files (if collected)
+staticfiles/
+# Ignore collected static files but allow custom admin CSS
+static/
+!static/admin/css/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp 

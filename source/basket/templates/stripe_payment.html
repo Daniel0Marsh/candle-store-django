@@ -1,59 +1,40 @@
 {% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} Basket - {{ branding.company_name }}{% endblock %}</title>
-
-    {% block extra_head %}
-    {% load static %}
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --cream: #fdf8f4;
-            --dusty-rose: #e8cfc7;
-            --mauve: #d8bfd8;
-            --caramel: #b88b4a;
-            --deep-brown: #4e342e;
-            --soft-pink: #fceae8;
-            --dark-text: #3b2c2a;
-        }
-
-        body {
-            background-color: var(--cream);
-            color: var(--dark-text);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 1px;
-            color: #fff;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
-        }
-
-        .btn-caramel {
-            background-color: var(--caramel);
-            color: #fff;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border-radius: 0.5rem;
-        }
-
-        .btn-caramel:hover {
-            background-color: #a06c36;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-    </style>
+{% block extra_head %}
+{# Page-specific CSS or JS ONLY if required #}
 {% endblock %}
 
 {% block content %}
-<section class="py-5" style="background-color: var(--cream); min-height: 80vh;">
+
+<!-- hero section -->
+<section
+  id="hero-section"
+  class="hero-overlay d-flex align-items-center text-light position-relative"
+  style="min-height: 50vh;"
+>
+  <img 
+    src="{{ branding.hero_image.url }}" 
+    alt="{{ branding.hero_image_alt_text }}"
+    class="w-100 h-100 position-absolute top-0 start-0"
+    style="object-fit: cover; z-index: 1;"
+  >
+
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row">
+      <div class="col-lg-7">
+        <h1 class="fw-bold display-4 mb-3">Payment</h1>
+        <p class="lead fw-semibold mb-0">
+            Complete your purchase securely
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5" style="min-height: 80vh;">
     <div class="container text-center">
-        <h1 class="display-4 fw-bold text-shadow-lg mb-4" style="font-family: 'Playfair Display', serif;">Secure Payment</h1>
+        <h1 class="display-4 fw-bold text-shadow-lg mb-4">Secure Payment</h1>
         <p class="lead mb-5">You're one step away from completing your order. Click the button below to proceed to secure payment.</p>
 
         <div class="d-flex justify-content-center">
@@ -61,7 +42,7 @@
                 <div class="card-body">
                     <h4 class="card-title mb-3">Pay with Card</h4>
                     <p class="mb-4">We use <strong>Stripe</strong> to securely process your payment. You will be redirected to complete your transaction.</p>
-                    <button id="checkout-button" class="btn btn-caramel btn-lg px-4 py-2 shadow-sm rounded-5">
+                    <button id="checkout-button" class="btn btn-secondary btn-lg px-4 py-2 shadow-sm rounded-5">
                         Proceed to Payment
                     </button>
                 </div>

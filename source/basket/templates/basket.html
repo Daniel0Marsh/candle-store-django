@@ -1,162 +1,176 @@
 {% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} Basket - {{ branding.company_name }}{% endblock %}</title>
-
-    {% block extra_head %}
-    {% load static %}
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --cream: #fdf8f4;
-            --dusty-rose: #e8cfc7;
-            --mauve: #d8bfd8;
-            --caramel: #b88b4a;
-            --deep-brown: #4e342e;
-            --soft-pink: #fceae8;
-            --dark-text: #3b2c2a;
-        }
-
-        body {
-            background-color: var(--cream);
-            color: var(--dark-text);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 1px;
-            color: #fff;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
-        }
-
-        .btn-caramel {
-            background-color: var(--caramel);
-            color: #fff;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border-radius: 0.5rem;
-        }
-
-        .btn-caramel:hover {
-            background-color: #a06c36;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-title {
-            font-family: 'Playfair Display', serif;
-        }
-
-        .text-shadow-lg {
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .scrolling-banner {
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-            background-color: var(--caramel);
-            color: #fff;
-        }
-
-        .scrolling-text {
-            display: inline-block;
-            padding-left: 100%;
-            animation: scroll-left 15s linear infinite;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        @keyframes scroll-left {
-            0% {
-                transform: translateX(0%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-
-    </style>
-    {% endblock %}
-</head>
+{% block extra_head %}
+{# Add page-specific CSS or JS here if needed #}
+{% endblock %}
 
 {% block content %}
+
+<!-- Hero Section -->
+<section id="hero-section" class="hero-overlay d-flex align-items-center text-light position-relative" style="min-height: 50vh;">
+  {% if branding.hero_image %}
+    <img src="{{ branding.hero_image.url }}" alt="{{ branding.hero_image_alt_text|default:'' }}" class="w-100 h-100 position-absolute top-0 start-0" style="object-fit: cover; z-index: 1;">
+  {% endif %}
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row">
+      <div class="col-lg-7">
+        <h1 class="fw-bold display-3 mb-4">Your Basket</h1>
+        <p class="fw-bold lead mb-4 fs-5">Review your items before checkout.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Basket Items Section -->
 <section class="basket-section py-5">
-    <div class="container">
-        <h1 class="text-center display-4 fw-bold text-shadow-lg mb-5" style="font-family: 'Playfair Display', serif;">Your Basket</h1>
+  <div class="container">
 
-        {% if cart.item_count > 0 %}
-            <div class="basket-items mb-4">
-                {% for item in cart.products %}
-                    <div class="basket-item d-flex flex-column flex-sm-row align-items-center justify-content-center mb-4 p-4 border rounded-4 shadow-sm bg-white">
-                        <!-- Image -->
-                        <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" class="rounded-4 mb-3 mb-sm-0" style="width: 150px; height: 150px; object-fit: cover;">
+    {% if cart.item_count > 0 %}
+      <div class="basket-items mb-4">
+        {% for item in cart.products %}
+          <div class="basket-item d-flex flex-column flex-sm-row align-items-center justify-content-center mb-4 p-4 border rounded-4 shadow-sm bg-white">
 
-                        <div class="item-details ms-sm-4 flex-grow-1 text-center text-sm-start">
-                            <!-- Title -->
-                            <h3 class="fw-bold mb-2">{{ item.product.title }}</h3>
+            <!-- Product Image -->
+            {% if item.product.image %}
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" class="rounded-4 mb-3 mb-sm-0" style="width: 150px; height: 150px; object-fit: cover;">
+            {% else %}
+              <div class="rounded-4 mb-3 mb-sm-0 bg-light d-flex align-items-center justify-content-center" style="width: 150px; height: 150px;">
+                <span class="text-muted">No Image</span>
+              </div>
+            {% endif %}
 
-                            <!-- Price -->
-                            <div class="d-flex justify-content-center justify-content-sm-between align-items-center mb-3">
-                                <p class="fw-bold mb-0">Price:
-                                    {% if item.discounted %}
-                                        <span class="text-muted text-decoration-line-through">${{ item.product.price }}</span>
-                                        <span class="text-danger fw-semibold">${{ item.product.discount_price }}</span>
-                                    {% else %}
-                                        ${{ item.product.price }}
-                                    {% endif %}
-                                </p>
-                            </div>
+            <!-- Product Details -->
+            <div class="item-details ms-sm-4 flex-grow-1 text-center text-sm-start">
+              <h3 class="fw-bold mb-2">{{ item.product.title }}</h3>
 
-                            <!-- Quantity and Buttons -->
-                            <div class="d-flex justify-content-center justify-content-sm-end align-items-center">
-                                <!-- Update Quantity Form -->
-                                <form method="POST" class="update-form text-center mb-3 mb-sm-0 me-1">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="action" value="update">
-                                    <input type="hidden" name="product_id" value="{{ item.product.id }}">
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <label for="quantity" class="fw-bold mb-0 me-2">Quantity:</label>
-                                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control w-auto ms-2" style="max-width: 80px;">
-                                        <button type="submit" class="btn btn-warning btn-sm ms-2 rounded-4">Update</button>
-                                    </div>
-                                </form>
-                                <!-- Remove Button -->
-                                <form method="POST" class="update-form text-center mb-3 mb-sm-0 me-1">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="action" value="remove">
-                                    <input type="hidden" name="product_id" value="{{ item.product.id }}">
-                                    <button type="submit" class="btn btn-danger btn-sm ms-2 rounded-4 shadow-sm">Remove</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+              <!-- Price -->
+              <div class="d-flex justify-content-center justify-content-sm-between align-items-center mb-3">
+                <p class="fw-bold mb-0">
+                  Price:
+                  {% if item.discounted %}
+                    <span class="text-muted text-decoration-line-through">£{{ item.product.price }}</span>
+                    <span class="text-danger fw-semibold ms-1">£{{ item.product.discount_price }}</span>
+                  {% else %}
+                    £{{ item.product.price }}
+                  {% endif %}
+                </p>
+              </div>
+
+              <!-- Quantity & Action Buttons -->
+              <div class="d-flex justify-content-center justify-content-sm-end align-items-center flex-wrap gap-2">
+
+                <!-- Update Quantity -->
+                <form method="POST" class="update-form d-flex align-items-center">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="update">
+                  <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                  <label for="quantity-{{ item.product.id }}" class="fw-bold mb-0 me-2">Qty:</label>
+                  <input type="number" name="quantity" id="quantity-{{ item.product.id }}" value="{{ item.quantity }}" min="1" class="form-control w-auto" style="max-width: 80px;">
+                  <button type="submit" class="btn btn-warning btn-sm ms-2 rounded-4">Update</button>
+                </form>
+
+                <!-- Remove Product -->
+                <form method="POST" class="update-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="remove">
+                  <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                  <button type="submit" class="btn btn-danger btn-sm rounded-4 shadow-sm">Remove</button>
+                </form>
+
+              </div>
             </div>
 
-            <div class="basket-total text-center mt-4">
-                {% if cart.free_delivery_applied %}
-                    <h5 class="text-success mb-2">🎉 You qualify for free delivery!</h5>
-                {% else %}
-                    <h5 class="text-muted mb-2">Delivery Fee: ${{ cart.delivery_fee }}</h5>
-                {% endif %}
-                <h4 class="fw-bold text-uppercase">Total: ${{ cart.final_total }}</h4>
-                <a href="{% url 'user_details' %}" class="btn btn-caramel btn-lg shadow-lg rounded-5 px-5 py-3 mt-3">Proceed to Checkout</a>
-            </div>
+          </div>
+        {% endfor %}
+      </div>
 
+      <!-- Basket Summary -->
+    <div class="basket-total text-center mt-4">
+
+        {% if cart.free_delivery_applied %}
+            <h5 class="text-success mb-2">🎉 You qualify for free delivery!</h5>
+        {% elif cart.remaining_for_free_delivery %}
+            <h5 class="text-warning mb-2">
+                Spend £{{ cart.remaining_for_free_delivery|floatformat:2 }} more to qualify for free delivery!
+            </h5>
+            <h5 class="text-muted mb-2">Delivery Fee: £{{ cart.delivery_fee }}</h5>
         {% else %}
-            <p class="text-center fs-4 text-muted">Your basket is empty. Why not add some products?</p>
+            <h5 class="text-muted mb-2">Delivery Fee: £{{ cart.delivery_fee }}</h5>
         {% endif %}
+
+        <h4 class="fw-bold text-uppercase">Total: £{{ cart.final_total }}</h4>
+        <a href="{% url 'user_details' %}" class="btn btn-secondary btn-lg shadow-lg rounded-5 px-5 py-3 mt-3">Proceed to Checkout</a>
+    </div>
+
+
+    {% else %}
+      <p class="text-center fs-4 text-muted mt-4">Your basket is empty. Why not add some products?</p>
+        <div class="d-flex gap-3 justify-content-center mt-4">
+          <a href="{% url 'products' %}" class="btn btn-secondary btn-lg" aria-label="visit the shop">
+            Shop now
+          </a>
+        </div>
+    {% endif %}
+
+  </div>
+</section>
+
+
+<!-- Featured Products Section -->
+<section class="featured-products py-5">
+    <div class="container">
+
+        <!-- Section header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="display-5 fw-bold mb-0 text-end">
+                Featured Products
+            </h2>
+
+            <a href="{% url 'products' %}" class="text-link">
+                View all <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <!-- Products grid -->
+        <div class="row g-4">
+
+            {% for product in featured_products|slice:":4" %}
+                {% include "_product_card.html" with product=product %}
+            {% empty %}
+                <p class="text-center">No featured products available at the moment.</p>
+            {% endfor %}
+        </div>
+
     </div>
 </section>
+
+<!-- Best Sellers Section -->
+<section class="best-sellers py-5">
+    <div class="container">
+
+        <!-- Section header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="display-5 fw-bold mb-0 text-end">
+                Best Sellers
+            </h2>
+
+            <a href="{% url 'products' %}" class="text-link">
+                View all <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <!-- Products grid -->
+        <div class="row g-4">
+
+            {% for product in best_sellers|slice:":4" %}
+                {% include "_product_card.html" with product=product %}
+            {% empty %}
+                <p class="text-center">No best sellers available at the moment.</p>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
 {% endblock %}

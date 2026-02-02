@@ -25,11 +25,39 @@ class SingletonAdmin(admin.ModelAdmin):
         instance = self.model.objects.first()
         if instance:
             return HttpResponseRedirect(
-                reverse(f"admin:{self.model._meta.app_label}_{self.model._meta.model_name}_change", args=[instance.pk])
+                reverse(
+                    f"admin:{self.model._meta.app_label}_{self.model._meta.model_name}_change",
+                    args=[instance.pk]
+                )
             )
         return super().changelist_view(request, extra_context)
 
 
 @admin.register(Branding)
 class BrandingAdmin(SingletonAdmin):
-    pass
+    """
+    Admin configuration for Branding model.
+    Organizes fields for easier editing and SEO management.
+    """
+
+    fieldsets = (
+        ("Company Information", {
+            "fields": ("company_name", "company_email", "company_phone", "company_address", "working_hours", "top_bar", "hero_image", "footer_video")
+        }),
+        ("Social Media", {
+            "fields": ("facebook_url", "twitter_url", "linkedin_url", "instagram_url")
+        }),
+        ("Logos", {
+            "fields": (
+                ("logo", "logo_alt_text", "logo_geo_tag"),
+                ("logo_dark", "logo_dark_alt_text"),
+                "favicon",
+            )
+        }),
+        ("SEO / Sitemap", {
+            "fields": ("site_map_description",)
+        }),
+    )
+
+    readonly_fields = ()
+    list_display = ("company_name", "company_email", "company_phone")

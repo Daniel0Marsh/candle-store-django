@@ -1,313 +1,141 @@
 {% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} Home - {{ branding.company_name }}{% endblock %}</title>
-
-    {% block extra_head %}
-    {% load static %}
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --cream: #fdf8f4;
-            --dusty-rose: #e8cfc7;
-            --mauve: #d8bfd8;
-            --caramel: #b88b4a;
-            --deep-brown: #4e342e;
-            --soft-pink: #fceae8;
-            --dark-text: #3b2c2a;
-        }
-
-        body {
-            background-color: var(--cream);
-            color: var(--dark-text);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 1px;
-            color: #fff;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
-        }
-
-        .btn-caramel {
-            background-color: var(--caramel);
-            color: #fff;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border-radius: 0.5rem;
-        }
-
-        .btn-caramel:hover {
-            background-color: #a06c36;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-title {
-            font-family: 'Playfair Display', serif;
-        }
-
-        .text-shadow-lg {
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .scrolling-banner {
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-            background-color: var(--caramel);
-            color: #fff;
-        }
-
-        .scrolling-text {
-            display: inline-block;
-            padding-left: 100%;
-            animation: scroll-left 15s linear infinite;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        @keyframes scroll-left {
-            0% {
-                transform: translateX(0%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-
-    </style>
-    {% endblock %}
-</head>
+{% block extra_head %}
+{# Page-specific CSS or JS ONLY if required #}
+{% endblock %}
 
 {% block content %}
 
-<section class="hero-section d-flex align-items-center text-light" style="height: 80vh; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.4)), url('{{ home.hero_image.url }}') center/cover no-repeat;">
-    <div class="container">
-        <div class="row justify-content-end">
-            <div class="col-lg-7 text-center">
-                <h1 class="hero-title display-2 fw-bold mb-4">{{ home.hero_title }}</h1>
-                <a href="#" class="btn btn-caramel btn-lg shadow">Shop Now</a>
-            </div>
-        </div>
-    </div>
-</section>
+<!-- hero section -->
+<section
+  id="hero-section"
+  class="hero-overlay d-flex align-items-center text-light position-relative"
+  style="min-height: 85vh; position: relative;"
+>
+  <img 
+    src="{{ home.hero_image.url }}" 
+    alt="{{ home.hero_image_alt_text }}"
+    class="w-100 h-100 position-absolute top-0 start-0" 
+    style="object-fit: cover; z-index: 1;"
+  >
 
-{% if pricing_settings %}
-    {% if pricing_settings.free_delivery_over %}
-        <div class="scrolling-banner py-2">
-            <div class="scrolling-text">
-                🎉 Free delivery on all orders over ${{ pricing_settings.free_delivery_over }}! 🎉
-                Free delivery on all orders over ${{ pricing_settings.free_delivery_over }}! 🎉
-                Free delivery on all orders over ${{ pricing_settings.free_delivery_over }}! 🎉
-                Free delivery on all orders over ${{ pricing_settings.free_delivery_over }}! 🎉
-                Free delivery on all orders over ${{ pricing_settings.free_delivery_over }}! 🎉
-            </div>
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row">
+      <div class="col-lg-7">
+
+        <h1 class="fw-bold display-3 mb-4">
+            {{ home.hero_title}}
+        </h1>
+
+        <p class="fw-bold lead mb-4 fs-5">
+          {{ home.hero_subheading }}
+        </p>
+
+        <div class="d-flex gap-3">
+          <a href="{% url 'products' %}" class="btn btn-light btn-lg" aria-label="visit the shop">
+            Shop now
+          </a>
         </div>
-    {% endif %}
-{% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- Featured Products Section -->
 <section class="featured-products py-5">
     <div class="container">
-        <h2 class="text-center display-5 fw-bold text-shadow-lg mb-5" style="font-family: 'Playfair Display', serif;">Featured Products</h2>
-        <div id="featuredCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                {% for product in featured_products %}
-                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <div class="d-flex justify-content-center">
-                            <a href="{% url 'product_detail' product.product_type product.pk %}" class="card border-0 rounded-5 bg-transparent text-decoration-none mt-2" style="width: 20rem;">
-                                <img src="{{ product.image.url|default_if_none:'/static/images/default.jpg' }}" class="card-img-top rounded-4" alt="{{ product.title }}" style="height: 300px; object-fit: cover;">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">{{ product.title }}</h5>
-                                    <p class="card-text fw-bold">
-                                        {% if product.discount_price %}
-                                            <del>${{ product.price }}</del> <span class="text-danger">${{ product.discount_price }}</span>
-                                        {% else %}
-                                            ${{ product.price }}
-                                        {% endif %}
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                {% empty %}
-                    <p class="text-center">No featured products available at the moment.</p>
-                {% endfor %}
-            </div>
 
-            <!-- Carousel controls -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+        <!-- Section header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="display-5 fw-bold mb-0 text-end">
+                Featured Products
+            </h2>
+
+            <a href="{% url 'products' %}" class="text-link">
+                View all <i class="bi bi-arrow-right ms-1"></i>
+            </a>
         </div>
+
+        <!-- Products grid -->
+        <div class="row g-4">
+
+            {% for product in featured_products|slice:":4" %}
+                {% include "_product_card.html" with product=product %}
+            {% empty %}
+                <p class="text-center">No featured products available at the moment.</p>
+            {% endfor %}
+        </div>
+
     </div>
 </section>
 
+{% for section in home.feature_sections.all %}
+<section class="feature-overlay position-relative overflow-hidden" style="height: 700px;">
+    <!-- Full-width image -->
+    <img src="{{ section.image.url }}"
+         alt="{{ section.image_alt_text }}"
+         class="w-100 h-100 object-fit-cover position-absolute top-0 start-0"
+         style="z-index: 1;">
 
-
-<!-- About Section -->
-<section class="about-section py-5">
-    <div class="container">
-        <div class="row align-items-center gy-4">
-            <div class="col-md-6">
-                <h2 class="display-5 fw-bold text-shadow-lg mb-5" style="font-family: 'Playfair Display', serif;">{{ home.about_title }}</h2>
-                <p class="lead">{{ home.about_subheading }}</p>
-                <a href="#" class="btn btn-caramel btn-lg mt-3">Learn More</a>
-            </div>
-            <div class="col-md-6 text-center">
-                <img src="{{ home.about_image.url }}" class="img-fluid rounded-4 shadow-sm" alt="About image">
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Why Choose Us Section -->
-<section class="why-choose-us py-5" style="background-color: var(--caramel)">
-    <div class="container">
-        <h2 class="text-center display-5 fw-bold text-shadow-lg mb-5" style="font-family: 'Playfair Display', serif;">Why Choose Us</h2>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 text-center">
-            <div class="col">
-                <div class="card h-100 border-0 shadow-lg rounded-4">
-                    <div class="card-body">
-                        <i class="bi bi-flower3 fs-1 mb-4 text-success"></i>
-                        <h5 class="card-title fw-bold mb-3">Eco-Friendly Wax</h5>
-                        <p class="card-text">Sustainably sourced and clean-burning wax that’s gentle on the planet.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100 border-0 shadow-lg rounded-4">
-                    <div class="card-body">
-                        <i class="bi bi-droplet-half fs-1 mb-4 text-primary"></i>
-                        <h5 class="card-title fw-bold mb-3">Hand-Poured</h5>
-                        <p class="card-text">Every candle is hand-crafted in small batches for quality and care.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100 border-0 shadow-lg rounded-4">
-                    <div class="card-body">
-                        <i class="bi bi-hourglass-split fs-1 mb-4 text-warning"></i>
-                        <h5 class="card-title fw-bold mb-3">Long-Lasting Scents</h5>
-                        <p class="card-text">Enjoy beautifully balanced aromas that fill your space for hours on end.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100 border-0 shadow-lg rounded-4">
-                    <div class="card-body">
-                        <i class="bi bi-heart-fill fs-1 mb-4 text-danger"></i>
-                        <h5 class="card-title fw-bold mb-3">Vegan & Cruelty-Free</h5>
-                        <p class="card-text">Kind to animals and completely free of animal-derived ingredients.</p>
-                    </div>
+    <!-- Content overlay -->
+    <div class="container h-100 position-relative" style="z-index: 2;">
+        <div class="row h-100 align-items-center">
+            <div class="col-12 col-lg-6
+                {% if forloop.counter|divisibleby:2 %}
+                    ms-auto text-lg-end
+                {% else %}
+                    text-lg-start
+                {% endif %}
+            ">
+                <div class="px-4 px-lg-5 py-3 bg-white bg-opacity-75 rounded-3 shadow"
+                     style="max-width: 520px;">
+                    <h2 class="display-5 fw-bold mb-3">{{ section.title }}</h2>
+                    <p class="fs-5 text-secondary mb-4">{{ section.subheading }}</p>
+                    {% if section.cta_url and section.cta_text %}
+                    <a href="{{ section.cta_url }}"
+                       class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                        {{ section.cta_text }}
+                    </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </section>
+{% endfor %}
+
+
+
+
 
 <!-- Best Sellers Section -->
 <section class="best-sellers py-5">
     <div class="container">
-        <h2 class="text-center display-5 fw-bold text-shadow-lg mb-5" style="font-family: 'Playfair Display', serif;">Best Sellers</h2>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            {% for product in best_sellers %}
-            <div class="col">
-                <a href="{% url 'product_detail' product.product_type product.pk %}" class="text-decoration-none text-dark">
-                    <div class="card h-100 border-0 bg-transparent rounded-5">
-                        <img src="{{ product.image.url }}" class="card-img-top rounded-4" alt="{{ product.title }}" style="height: 300px; object-fit: cover;">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ product.title }}</h5>
-                            <p class="card-text fw-bold">
-                                {% if product.discount_price %}
-                                    <del>${{ product.price }}</del> <span class="text-danger">${{ product.discount_price }}</span>
-                                {% else %}
-                                    ${{ product.price }}
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-                </a>
-            </div>
+
+        <!-- Section header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="display-5 fw-bold mb-0 text-end">
+                Best Sellers
+            </h2>
+
+            <a href="{% url 'products' %}" class="text-link">
+                View all <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <!-- Products grid -->
+        <div class="row g-4">
+
+            {% for product in best_sellers|slice:":4" %}
+                {% include "_product_card.html" with product=product %}
             {% empty %}
-                <p class="text-center">No bestsellers available at the moment.</p>
+                <p class="text-center">No best sellers available at the moment.</p>
             {% endfor %}
         </div>
+
     </div>
 </section>
-
-
-
-<!-- Contact Us Section -->
-<section id="contact" class="contact py-5">
-    <div class="container">
-        <h2 class="text-center display-4 fw-bold text-shadow-lg mb-5" style="font-family: 'Playfair Display', serif; color: #333;">Contact Us</h2>
-        <div class="row align-items-center justify-content-center">
-            <!-- Left Image Column -->
-            <div class="col-md-6 mb-4 mb-md-0">
-                <img src="{{ home.about_image.url }}" class="img-fluid rounded-4 shadow-lg" alt="Contact Us Image">
-            </div>
-            <!-- Right Form Column -->
-            <div class="col-md-6">
-                <form method="POST" class="shadow p-4 rounded-5 bg-light">
-                    {% csrf_token %}
-                    <div class="mb-4">
-                        <input type="text" class="form-control form-control-lg bg-light" id="name" name="name" placeholder="Full Name..." required>
-                    </div>
-                    <div class="mb-4">
-                        <input type="email" class="form-control form-control-lg bg-light" id="email" name="email" placeholder="Email..." required>
-                    </div>
-                    <div class="mb-4">
-                        <textarea class="form-control form-control-lg bg-light" id="message" name="message" rows="5" placeholder="Your Message..." required></textarea>
-                    </div>
-                    <!-- Google reCAPTCHA -->
-                    <div class="text-center mb-4">
-                        <div class="g-recaptcha" data-sitekey="6LfrcisiAAAAAKrKu6q-Y4XV50r3U-GPyikxu4r7" data-callback="enableSubmit"></div>
-                    </div>
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    <div class="text-center">
-                        <button type="submit" id="submit-btn" class="btn btn-caramel btn-lg px-5 py-3 shadow-lg rounded-5" disabled>Send Message</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<!-- JavaScript -->
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script>
-    function enableSubmit() {
-        // Enable the submit button when reCAPTCHA is completed
-        document.getElementById('submit-btn').disabled = false;
-    }
-</script>
-
-
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 
 {% endblock %}
