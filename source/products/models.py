@@ -33,9 +33,9 @@ class ProductQuerySet(models.QuerySet):
         if days is None:
             # Get the default from StoreSettingsAdmin
             try:
-                settings_instance = StoreSettingsAdmin.objects.first()
+                settings_instance = ProductSettings.objects.first()
                 days = settings_instance.new_product_days if settings_instance else 30
-            except StoreSettingsAdmin.DoesNotExist:
+            except ProductSettings.DoesNotExist:
                 days = 30
 
         threshold = timezone.now() - timezone.timedelta(days=days)
@@ -175,6 +175,7 @@ class Product(models.Model):
 
     image = models.ImageField(
         upload_to='products/',
+        default="default/Candle-Product.webp",
         blank=True,
         null=True
     )

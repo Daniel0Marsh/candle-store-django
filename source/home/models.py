@@ -10,7 +10,7 @@ class HomePage(models.Model):
     hero_image = models.ImageField(
         upload_to="home_page/",
         help_text="Upload the hero section background image.",
-        default="default/placeholder.jpg"
+        default="default/hero-image.webp"
     )
 
     hero_title = models.CharField(
@@ -60,7 +60,7 @@ class HomePageFeatureSection(models.Model):
     image = models.ImageField(
         upload_to="home_page/features/",
         help_text="Full-height image for this section.",
-        default="default/placeholder.jpg"
+        default="default/candle-feature.webp"
     )
 
     image_alt_text = models.CharField(

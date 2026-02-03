@@ -58,13 +58,13 @@ class Branding(models.Model):
     footer_video = models.FileField(
         upload_to="branding/videos/",
         help_text="Upload the website footer video",
-        default="default/footer_video.mp4"
+        default="default/footer-video.mp4"
     )
 
     # Logos
     logo = models.ImageField(
         upload_to="branding/",
-        default="default/logo.png"
+        default="default/White-Logo.webp"
     )
 
     logo_alt_text = models.CharField(
@@ -80,7 +80,7 @@ class Branding(models.Model):
 
     logo_dark = models.ImageField(
         upload_to="branding/",
-        default="default/logo-dark.png"
+        default="default/Gold-Logo.webp"
     )
 
     logo_dark_alt_text = models.CharField(
