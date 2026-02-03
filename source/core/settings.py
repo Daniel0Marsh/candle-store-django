@@ -150,6 +150,9 @@ CSRF_COOKIE_SECURE = True
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+# Suppress specific system checks (e.g., for HTTPS behind a proxy)
+SILENCED_SYSTEM_CHECKS = ["security.W004"]
+
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
