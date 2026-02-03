@@ -164,15 +164,14 @@ USE_TZ = False
 # Specify the type of auto-generated primary key fields for models
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Static & Media Files
 # Static files
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
-    BASE_DIR / "source" / "static",
+    BASE_DIR / "static",
 ]
 
-STATIC_ROOT = BASE_DIR / "source" / "staticfiles"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_STORAGE = (
     "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
@@ -180,5 +179,6 @@ STATICFILES_STORAGE = (
 
 # Media files
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "source" / "media"
+MEDIA_ROOT = BASE_DIR / "media"
+
 
