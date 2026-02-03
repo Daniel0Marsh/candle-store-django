@@ -173,9 +173,12 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATICFILES_STORAGE = (
-    "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-)
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
+
 
 # Media files
 MEDIA_URL = "/media/"
