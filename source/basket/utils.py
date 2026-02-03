@@ -20,7 +20,7 @@ def calculate_basket(basket):
         except Product.DoesNotExist:
             continue
 
-        price = product.discount_price or product.price
+        price = product.effective_price
         product_total = price * quantity
 
         products_list.append({

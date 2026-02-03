@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% if is_admin %}
+            New Order – {{ branding.company_name }}
+        {% else %}
+            Order Confirmation – {{ branding.company_name }}
+        {% endif %}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f6f7f9;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 32px;
+        }
+
+        /* -------------------
+           Brand Header
+        ------------------- */
+        .brand-header {
+            text-align: center;
+            padding: 32px 16px;
+            border-bottom: 3px solid {{ branding.primary_colour|default:"#e91e63" }};
+        }
+
+        .logo {
+            max-height: 48px;
+            margin-bottom: 12px;
+        }
+
+        .brand-name {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 0.4px;
+        }
+
+        .brand-tagline {
+            font-size: 13px;
+            color: #777777;
+            margin-top: 4px;
+        }
+
+        /* -------------------
+           Status Banner
+        ------------------- */
+        .status-banner {
+            margin-top: 24px;
+            padding: 16px;
+            background-color: #faf5f8;
+            border-left: 4px solid {{ branding.primary_colour|default:"#e91e63" }};
+            font-size: 15px;
+        }
+
+        .status-banner strong {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        /* -------------------
+           Sections
+        ------------------- */
+        .section {
+            margin-top: 32px;
+        }
+
+        .section h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #e6e6e6;
+            padding-bottom: 8px;
+        }
+
+        /* -------------------
+           Products
+        ------------------- */
+        .product {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .product:last-child {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .product-qty {
+            font-size: 13px;
+            color: #666666;
+            margin-top: 2px;
+        }
+
+        .product-price {
+            text-align: right;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* -------------------
+           Totals
+        ------------------- */
+        .totals {
+            background-color: #f9f9f9;
+            padding: 16px;
+            margin-top: 16px;
+            border-radius: 4px;
+            text-align: right;
+        }
+
+        .totals p {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+
+        .totals .final {
+            font-size: 18px;
+            font-weight: bold;
+            color: {{ branding.primary_colour|default:"#e91e63" }};
+            margin-top: 8px;
+        }
+
+        /* -------------------
+           Address
+        ------------------- */
+        .address {
+            background-color: #f9f9f9;
+            padding: 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* -------------------
+           Footer
+        ------------------- */
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 13px;
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Brand Header -->
+    <div class="brand-header">
+        {% if branding.logo %}
+            <img
+                src="{{ site_url }}{{ branding.logo.url }}"
+                alt="{{ branding.company_name }}"
+                class="logo"
+            >
+        {% endif %}
+        <div class="brand-name">{{ branding.company_name }}</div>
+        {% if branding.tagline %}
+            <div class="brand-tagline">{{ branding.tagline }}</div>
+        {% endif %}
+    </div>
+
+    <!-- Status -->
+    <div class="status-banner">
+        {% if is_admin %}
+            <strong>New order received</strong>
+            Order {{ order.reference }} has just been placed.
+        {% else %}
+            <strong>Order confirmed</strong>
+            Thank you {{ order.full_name }} — we’re preparing your order.
+        {% endif %}
+    </div>
+
+    <!-- Order Summary -->
+    <div class="section">
+        <h2>Order summary</h2>
+
+        {% for item in order.items.all %}
+            <div class="product">
+                <div>
+                    <div class="product-name">{{ item.product_title }}</div>
+                    <div class="product-qty">Quantity: {{ item.quantity }}</div>
+                </div>
+                <div class="product-price">
+                    £{{ item.unit_price }}
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="totals">
+            {% if order.delivery_fee == 0 %}
+                <p><strong>Free delivery</strong></p>
+            {% else %}
+                <p>Delivery: £{{ order.delivery_fee }}</p>
+            {% endif %}
+            <p class="final">Total: £{{ order.total }}</p>
+        </div>
+    </div>
+
+    <!-- Delivery Address -->
+    <div class="section">
+        <h2>Delivery address</h2>
+        <div class="address">
+            {{ order.address_line1 }}<br>
+            {% if order.address_line2 %}
+                {{ order.address_line2 }}<br>
+            {% endif %}
+            {{ order.city }}<br>
+            {{ order.postal_code }}<br>
+            {{ order.country }}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        {% if is_admin %}
+            Please process this order as soon as possible.
+        {% else %}
+            You’ll receive another email once your order has shipped.<br>
+            Thank you for choosing {{ branding.company_name }}.
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

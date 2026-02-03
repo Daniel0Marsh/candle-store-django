@@ -38,6 +38,7 @@ else:
 # stripe payment settings
 STRIPE_SECRET_KEY = config("STRIPE_SECRET_KEY")
 STRIPE_PUBLISHABLE_KEY = config("STRIPE_PUBLISHABLE_KEY")
+STRIPE_WEBHOOK_SECRET = config("STRIPE_WEBHOOK_SECRET")
 
 # Application definition
 INSTALLED_APPS = [
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
     'errors',
     'seo',
     'contact',
+    'orders',
 ]
 
 MIDDLEWARE = [

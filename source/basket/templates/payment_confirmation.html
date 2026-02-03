@@ -26,11 +26,7 @@
                 <h1 class="display-4 fw-bold mb-3">🎉 Payment Confirmed!</h1>
                 <p class="lead fw-semibold mb-3">Your payment has been processed successfully.</p>
 
-                {% if user_email %}
-                    <p class="mb-4">A confirmation email has been sent to <strong>{{ user_email }}</strong>.</p>
-                {% else %}
-                    <p class="mb-4 text-warning">We were unable to send a confirmation email.</p>
-                {% endif %}
+                <p class="mb-4">A confirmation email has been sent to you.</p>
 
                 <a href="{% url 'home' %}" 
                    class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-lg">

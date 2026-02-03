@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your order has shipped – {{ branding.company_name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f6f7f9;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 32px;
+        }
+
+        /* -------------------
+           Brand Header
+        ------------------- */
+        .brand-header {
+            text-align: center;
+            padding: 32px 16px;
+            border-bottom: 3px solid {{ branding.primary_colour|default:"#e91e63" }};
+        }
+
+        .logo {
+            max-height: 48px;
+            margin-bottom: 12px;
+        }
+
+        .brand-name {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 0.4px;
+        }
+
+        .brand-tagline {
+            font-size: 13px;
+            color: #777777;
+            margin-top: 4px;
+        }
+
+        /* -------------------
+           Status Banner
+        ------------------- */
+        .status-banner {
+            margin-top: 24px;
+            padding: 16px;
+            background-color: #faf5f8;
+            border-left: 4px solid {{ branding.primary_colour|default:"#e91e63" }};
+            font-size: 15px;
+        }
+
+        .status-banner strong {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        /* -------------------
+           Sections
+        ------------------- */
+        .section {
+            margin-top: 32px;
+        }
+
+        .section h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #e6e6e6;
+            padding-bottom: 8px;
+        }
+
+        /* -------------------
+           Shipping Box
+        ------------------- */
+        .shipping-box {
+            background-color: #f9f9f9;
+            padding: 16px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .shipping-row {
+            margin-bottom: 8px;
+        }
+
+        .shipping-row strong {
+            display: inline-block;
+            min-width: 140px;
+        }
+
+        /* -------------------
+           CTA Button
+        ------------------- */
+        .cta {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .cta a {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: {{ branding.primary_colour|default:"#e91e63" }};
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* -------------------
+           Footer
+        ------------------- */
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 13px;
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Brand Header -->
+    <div class="brand-header">
+        {% if branding.logo %}
+            <img
+                src="{{ site_url }}{{ branding.logo.url }}"
+                alt="{{ branding.company_name }}"
+                class="logo"
+            >
+        {% endif %}
+        <div class="brand-name">{{ branding.company_name }}</div>
+        {% if branding.tagline %}
+            <div class="brand-tagline">{{ branding.tagline }}</div>
+        {% endif %}
+    </div>
+
+    <!-- Status -->
+    <div class="status-banner">
+        <strong>Your order is on the way</strong>
+        Order {{ order.reference }} has been dispatched.
+    </div>
+
+    <!-- Message -->
+    <div class="section">
+        <p>
+            Hi {{ order.full_name }},
+            <br><br>
+            We’re pleased to let you know that your order has been shipped and is now with the carrier.
+        </p>
+    </div>
+
+    <!-- Shipping Details -->
+    <div class="section">
+        <h2>Shipping details</h2>
+
+        <div class="shipping-box">
+            <div class="shipping-row">
+                <strong>Carrier:</strong> {{ shipment.carrier }}
+            </div>
+
+            {% if shipment.tracking_number %}
+                <div class="shipping-row">
+                    <strong>Tracking number:</strong> {{ shipment.tracking_number }}
+                </div>
+            {% endif %}
+
+            {% if shipment.estimated_delivery %}
+                <div class="shipping-row">
+                    <strong>Estimated delivery:</strong>
+                    {{ shipment.estimated_delivery|date:"j F Y" }}
+                </div>
+            {% endif %}
+        </div>
+
+        {% if shipment.tracking_url %}
+            <div class="cta">
+                <a href="{{ shipment.tracking_url }}">
+                    Track your delivery
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        If you have any questions, simply reply to this email.<br>
+        Thank you for shopping with {{ branding.company_name }}.
+    </div>
+
+</div>
+
+</body>
+</html>
